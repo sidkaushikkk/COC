@@ -1,0 +1,161 @@
+import React, { useState } from 'react';
+import { Mail, Send, CheckCircle, BookOpen, Link2, Users } from 'lucide-react';
+import Footer from '../components/Footer';
+
+export default function ContactPage({ onNavigate }) {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log('Contact message to OWNER_EMAIL_PLACEHOLDER:', formData);
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="contact-page page-enter">
+      {/* Dark Header */}
+      <div className="contact-header">
+        <div className="contact-header-inner">
+          <span className="editorial-meta-tag font-sans">Get in Touch</span>
+          <h1>Contact us</h1>
+          <p>
+            From reader inquiries, editorial feedback to requests — we read every message.
+          </p>
+        </div>
+      </div>
+
+      {/* Two-column body */}
+      <div className="contact-body">
+        {/* Left: Info Column */}
+        <div className="contact-info-col">
+          <div className="contact-info-block">
+            <h3>Editorial Desk</h3>
+            <a href="mailto:editors@childrenofcapital.org">
+              <Mail size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
+              editors@childrenofcapital.org
+            </a>
+          </div>
+
+          <div className="contact-info-block">
+            <h3>Submission Hub</h3>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.7 }}>
+              Want to contribute an article? Use our dedicated{' '}
+              <span
+                style={{ color: 'var(--gold-dark)', cursor: 'pointer', fontWeight: 600 }}
+                onClick={() => onNavigate('home', '#contribute')}
+              >
+                Contributor Form
+              </span>{' '}
+              for manuscript submissions.
+            </p>
+          </div>
+
+          <div className="contact-info-block">
+            <h3>Follow Our Work</h3>
+            <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+              
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: 'var(--ink-muted)', transition: 'color 0.25s' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--navy)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--ink-muted)'}
+              >
+                <Users size={16} /> LinkedIn
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Right: Contact Form */}
+        <div className="contact-form-col">
+          <h2>Send a Message</h2>
+
+          {!submitted ? (
+            <form className="contact-form font-sans" onSubmit={handleSubmit}>
+              <div className="form-row-2">
+                <div className="form-group">
+                  <label htmlFor="contact-name">Your Name</label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your Name Here"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="contact-email">Email Address</label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="your@email.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contact-subject">Subject</label>
+                <input
+                  type="text"
+                  id="contact-subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="e.g. Reader Feedback on the TSMC essay"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="contact-message">Message</label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="6"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Share your thoughts, questions, or feedback..."
+                  required
+                />
+              </div>
+
+              <button type="submit" className="btn-primary form-submit-btn">
+                Send Message <Send size={15} />
+              </button>
+            </form>
+          ) : (
+            <div className="contact-form-success">
+              <CheckCircle size={48} style={{ color: 'var(--gold-dark)' }} />
+              <h3>Message Received</h3>
+              <p>Thank you for reaching out. Our editorial team will review your message and respond within 3–5 working days.</p>
+              <button
+                className="btn-secondary"
+                onClick={() => setSubmitted(false)}
+                style={{ marginTop: 8 }}
+              >
+                Send Another Message
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <Footer onNavigate={onNavigate} />
+    </div>
+  );
+}
