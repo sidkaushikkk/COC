@@ -1,9 +1,18 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ARTICLES, AUTHORS, CATEGORIES } from '../data/mockData';
+import { CATEGORIES } from '../data/mockData';
+import { fetchArticles } from '../services/api';
 import { Calendar } from 'lucide-react';
 import Footer from '../components/Footer';
 
 export default function ArticlesPage({ categoryFilter, onNavigate }) {
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    fetchArticles().then(data => {
+      setArticles(data);
+    });
+  }, []);
+
   // Decode category from URL param e.g. "?cat=Climate" or "?cat=Economics"
   const initialCat = useMemo(() => {
     if (!categoryFilter) return 'All';
@@ -20,11 +29,9 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
 
   const filteredArticles = useMemo(() => {
     return activeCategory === 'All'
-      ? [...ARTICLES]
-      : ARTICLES.filter(a => a.category === activeCategory);
-  }, [activeCategory]);
-
-  const categories = ['All', ...CATEGORIES];
+      ? [...articles]
+      : articles.filter(a => a.category === activeCategory);
+  }, [activeCategory, articles]);
 
   return (
     <div className="articles-page page-enter">
@@ -51,23 +58,28 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
         {filteredArticles.length > 0 ? (
           <div className="articles-full-grid">
             {filteredArticles.map(article => {
-              const author = AUTHORS[article.authorId];
+              const articleId = article.slug || article._id || article.id;
+              const authorObj = typeof article.author === 'object' ? article.author : { name: article.author || 'Anviksha Singh' };
+              const pubDate = article.publishedAt
+                ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : article.date || 'Feb 2025';
+
               return (
-                <article key={article.id} className="article-card">
+                <article key={article._id || article.id} className="article-card">
                   <div
                     className="card-image-wrapper"
-                    onClick={() => onNavigate('article', article.id)}
+                    onClick={() => onNavigate('article', articleId)}
                   >
                     <img src={article.coverImage} alt={article.title} loading="lazy" />
                     <div className="card-category-badge font-sans">{article.category}</div>
                   </div>
                   <div className="card-content-body">
                     <div className="card-meta font-sans">
-                      <span><Calendar size={12} className="meta-inline-icon" /> {article.date}</span>
+                      <span><Calendar size={12} className="meta-inline-icon" /> {pubDate}</span>
                     </div>
                     <h3
                       className="card-title-heading"
-                      onClick={() => onNavigate('article', article.id)}
+                      onClick={() => onNavigate('article', articleId)}
                     >
                       {article.title}
                     </h3>
@@ -75,11 +87,11 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
                     <div className="card-footer font-sans">
                       <a
                         className="card-author-link"
-                        href={author?.socials?.linkedin}
+                        href={authorObj?.linkedin || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        By {author?.name}
+                        By {authorObj?.name || 'Anviksha Singh'}
                       </a>
                     </div>
                   </div>
@@ -109,3 +121,4 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
     </div>
   );
 }
+

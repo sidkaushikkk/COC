@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import { Check } from 'lucide-react';
+import { subscribeNewsletter } from '../services/api';
 
 export default function NewsletterBox() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+
+    setLoading(true);
+    setErrorMsg('');
+    try {
+      await subscribeNewsletter(email);
       setSubscribed(true);
       setEmail('');
+    } catch (err) {
+      setErrorMsg(err.message || 'Subscription failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -33,10 +45,15 @@ export default function NewsletterBox() {
                   onChange={(e) => setEmail(e.target.value)}
                   required 
                 />
-                <button type="submit" className="btn-primary">
-                  Subscribe
+                <button type="submit" className="btn-primary" disabled={loading}>
+                  {loading ? 'Subscribing...' : 'Subscribe'}
                 </button>
               </div>
+              {errorMsg && (
+                <p style={{ color: '#d9534f', fontSize: '14px', marginTop: '10px' }}>
+                  {errorMsg}
+                </p>
+              )}
             </form>
           ) : (
             <div className="newsletter-success font-sans">
@@ -53,3 +70,4 @@ export default function NewsletterBox() {
     </section>
   );
 }
+

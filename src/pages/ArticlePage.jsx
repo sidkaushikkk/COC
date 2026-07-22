@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { ARTICLES, AUTHORS } from '../data/mockData';
+import React, { useState, useEffect, useMemo } from 'react';
+import { fetchArticles, fetchArticleBySlug } from '../services/api';
 import { Calendar, ChevronLeft } from 'lucide-react';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
@@ -103,19 +103,64 @@ function renderContent(rawContent) {
 
 /* ── Component ────────────────────────────────────────────────── */
 export default function ArticlePage({ articleId, onNavigate }) {
-  const article = useMemo(
-    () => ARTICLES.find(a => a.id === articleId) || ARTICLES[0],
-    [articleId]
-  );
-  const author = AUTHORS[article.authorId];
+  const [article, setArticle] = useState(null);
+  const [allArticles, setAllArticles] = useState([]);
 
-  // Related: same category, different article
-  const related = useMemo(
-    () => ARTICLES.filter(a => a.id !== article.id && a.category === article.category).slice(0, 2)
-      .concat(ARTICLES.filter(a => a.id !== article.id && a.category !== article.category).slice(0, 2 - Math.min(2, ARTICLES.filter(a => a.id !== article.id && a.category === article.category).length)))
-      .slice(0, 2),
-    [article]
-  );
+  useEffect(() => {
+    fetchArticles().then(data => {
+      setAllArticles(data);
+      if (articleId) {
+        const found = data.find(a => a.slug === articleId || a._id === articleId || a.id === articleId);
+        if (found) {
+          setArticle(found);
+          return;
+        }
+      }
+      if (data.length > 0) {
+        setArticle(data[0]);
+      }
+    });
+
+    if (articleId) {
+      fetchArticleBySlug(articleId).then(data => {
+        if (data) setArticle(data);
+      });
+    }
+  }, [articleId]);
+
+  const author = useMemo(() => {
+    if (!article) return null;
+    if (typeof article.author === 'object') return article.author;
+    return {
+      name: article.author || 'Anviksha Singh',
+      role: 'Founder & Editor, Children of Capital',
+      bio: 'The editor of Children of Capital writes about the systems that shape public life.',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      linkedin: 'https://www.linkedin.com/in/anviksha-singh-children-of-capital/'
+    };
+  }, [article]);
+
+  const related = useMemo(() => {
+    if (!article || !allArticles.length) return [];
+    const currentKey = article.slug || article._id;
+    return allArticles
+      .filter(a => (a.slug || a._id) !== currentKey && a.category === article.category)
+      .slice(0, 2)
+      .concat(allArticles.filter(a => (a.slug || a._id) !== currentKey && a.category !== article.category).slice(0, 2))
+      .slice(0, 2);
+  }, [article, allArticles]);
+
+  if (!article) {
+    return (
+      <div className="article-page page-enter" style={{ padding: '120px 20px', textAlign: 'center' }}>
+        <p>Loading article...</p>
+      </div>
+    );
+  }
+
+  const pubDate = article.publishedAt
+    ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : article.date || 'Feb 2025';
 
   return (
     <div className="article-page page-enter">
@@ -131,11 +176,11 @@ export default function ArticlePage({ articleId, onNavigate }) {
           <div className="article-hero-category font-sans">{article.category}</div>
           <h1 className="article-hero-title">{article.title}</h1>
           <div className="article-hero-byline font-sans">
-            <span>By <a className="byline-author-name" href={author?.socials?.linkedin} target="_blank" rel="noopener noreferrer">{author?.name}</a></span>
+            <span>By <a className="byline-author-name" href={author?.linkedin || '#'} target="_blank" rel="noopener noreferrer">{author?.name}</a></span>
             <span className="byline-sep">·</span>
-            <span><Calendar size={13} style={{ marginRight: 4, display: 'inline', verticalAlign: 'middle' }} />{article.date}</span>
+            <span><Calendar size={13} style={{ marginRight: 4, display: 'inline', verticalAlign: 'middle' }} />{pubDate}</span>
             <span className="byline-sep">·</span>
-            <span style={{ background: 'rgba(197,168,128,0.2)', padding: '2px 8px', borderRadius: 2, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>{article.difficulty}</span>
+            <span style={{ background: 'rgba(197,168,128,0.2)', padding: '2px 8px', borderRadius: 2, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>{article.readingTime || 'Advanced'}</span>
           </div>
         </div>
       </div>
@@ -156,16 +201,18 @@ export default function ArticlePage({ articleId, onNavigate }) {
         {/* Author Card */}
         {author && (
           <div className="article-author-card font-sans">
-            <img
-              src={author.photo}
-              alt={author.name}
-              className="article-author-avatar"
-            />
+            {author.photo && (
+              <img
+                src={author.photo}
+                alt={author.name}
+                className="article-author-avatar"
+              />
+            )}
             <div className="article-author-info">
               <div className="article-author-label">About the Author</div>
               <a
                 className="article-author-name"
-                href={author.socials.linkedin}
+                href={author.linkedin || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -182,24 +229,27 @@ export default function ArticlePage({ articleId, onNavigate }) {
           <div className="article-related-section">
             <h3>Continue Reading</h3>
             <div className="article-related-grid">
-              {related.map(rel => (
-                <div
-                  key={rel.id}
-                  className="related-article-card"
-                  onClick={() => onNavigate('article', rel.id)}
-                >
-                  <img
-                    src={rel.coverImage}
-                    alt={rel.title}
-                    className="related-article-img"
-                    loading="lazy"
-                  />
-                  <div className="related-article-info">
-                    <div className="related-article-cat font-sans">{rel.category}</div>
-                    <div className="related-article-title">{rel.title}</div>
+              {related.map(rel => {
+                const relId = rel.slug || rel._id || rel.id;
+                return (
+                  <div
+                    key={rel._id || rel.id}
+                    className="related-article-card"
+                    onClick={() => onNavigate('article', relId)}
+                  >
+                    <img
+                      src={rel.coverImage}
+                      alt={rel.title}
+                      className="related-article-img"
+                      loading="lazy"
+                    />
+                    <div className="related-article-info">
+                      <div className="related-article-cat font-sans">{rel.category}</div>
+                      <div className="related-article-title">{rel.title}</div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -207,3 +257,4 @@ export default function ArticlePage({ articleId, onNavigate }) {
     </div>
   );
 }
+

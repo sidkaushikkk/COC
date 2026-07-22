@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import { Mail, Send, CheckCircle, Users } from 'lucide-react';
+import { submitContactForm } from '../services/api';
 import Footer from '../components/Footer';
 
 export default function ContactPage({ onNavigate }) {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log('Contact message to OWNER_EMAIL_PLACEHOLDER:', formData);
-    setSubmitted(true);
+    setLoading(true);
+    setErrorMsg('');
+    try {
+      await submitContactForm(formData);
+      setSubmitted(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      setErrorMsg(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -127,8 +139,14 @@ export default function ContactPage({ onNavigate }) {
                 />
               </div>
 
-              <button type="submit" className="btn-primary form-submit-btn">
-                Send Message <Send size={15} />
+              {errorMsg && (
+                <p style={{ color: '#d9534f', fontSize: '14px', marginBottom: '16px' }}>
+                  {errorMsg}
+                </p>
+              )}
+
+              <button type="submit" className="btn-primary form-submit-btn" disabled={loading}>
+                {loading ? 'Sending...' : 'Send Message'} <Send size={15} />
               </button>
             </form>
           ) : (
@@ -152,3 +170,4 @@ export default function ContactPage({ onNavigate }) {
     </div>
   );
 }
+

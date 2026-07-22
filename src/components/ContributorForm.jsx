@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PenTool, ArrowUpRight, CheckCircle } from 'lucide-react';
 import { CATEGORIES } from '../data/mockData';
+import { submitContributorArticle } from '../services/api';
 
 export default function ContributorForm() {
   const [formData, setFormData] = useState({
@@ -18,50 +19,40 @@ export default function ContributorForm() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setErrorMsg('');
 
-    /*
-     * ==========================================
-     * BACKEND DEVELOPER INTEGRATION NOTICE
-     * ==========================================
-     * Every submission must be sent as an email request to the editor/owner's email.
-     * Use target placeholder: OWNER_EMAIL_PLACEHOLDER (e.g. admin@childrenofcapital.org)
-     * 
-     * Recommended Workflow:
-     * 1. Capture payload in a secure Node/Express/Serverless API route.
-     * 2. Validate input and sanitize inputs.
-     * 3. Dispatch an email using SendGrid, Postmark, or Mailgun to: OWNER_EMAIL_PLACEHOLDER.
-     *    Include subject line: "[Submission Request] - {article title} by {author name}"
-     *    Include the raw markdown/text content and author credentials in the body.
-     * 4. Once the owner/editor manually reviews the request, they can approve it
-     *    via an admin dashboard, setting "status = 'approved'" in the DB.
-     *    Approved articles then dynamically load in the articles feed.
-     */
-    console.log("Simulating email notification to: OWNER_EMAIL_PLACEHOLDER");
-    console.log("Submission Payload:", formData);
-
-    setSubmitted(true);
-    // Reset form after a brief delay
-    setFormData({
-      name: '',
-      email: '',
-      title: '',
-      category: CATEGORIES[0],
-      readingTime: '',
-      excerpt: '',
-      coverImage: '',
-      content: '',
-      bio: '',
-      linkedin: '',
-      website: ''
-    });
+    try {
+      await submitContributorArticle(formData);
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        title: '',
+        category: CATEGORIES[0],
+        readingTime: '',
+        excerpt: '',
+        coverImage: '',
+        content: '',
+        bio: '',
+        linkedin: '',
+        website: ''
+      });
+    } catch (err) {
+      setErrorMsg(err.message || 'Submission failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -205,9 +196,14 @@ export default function ContributorForm() {
                   ></textarea>
                 </div>
 
+                {errorMsg && (
+                  <p style={{ color: '#d9534f', fontSize: '14px', marginBottom: '16px' }}>
+                    {errorMsg}
+                  </p>
+                )}
 
-                <button type="submit" className="btn-primary form-submit-btn">
-                  Submit Manuscript <ArrowUpRight size={16} />
+                <button type="submit" className="btn-primary form-submit-btn" disabled={loading}>
+                  {loading ? 'Submitting...' : 'Submit Manuscript'} <ArrowUpRight size={16} />
                 </button>
               </form>
             ) : (
@@ -215,7 +211,7 @@ export default function ContributorForm() {
                 <CheckCircle size={48} className="success-icon" />
                 <h3 className="font-serif">Manuscript Dispatched</h3>
                 <p>
-                  Thank you. Your article details have been packaged and sent to the editorial review team at <strong>OWNER_EMAIL_PLACEHOLDER</strong>.
+                  Thank you. Your article details have been packaged and sent to the editorial review team.
                 </p>
                 <p className="success-note">
                   The editorial board will review the piece. If approved, it will be published in our public feed.
@@ -232,3 +228,4 @@ export default function ContributorForm() {
     </section>
   );
 }
+

@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Search, Calendar, Clock, ArrowRight } from 'lucide-react';
-import { ARTICLES, AUTHORS } from '../data/mockData';
+import { X, Search, Calendar, ArrowRight } from 'lucide-react';
+import { fetchArticles } from '../services/api';
 
 export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
   const [query, setQuery] = useState('');
+  const [articles, setArticles] = useState([]);
   const [results, setResults] = useState([]);
   const searchInputRef = useRef(null);
 
-  // Focus search input when overlay opens
   useEffect(() => {
     if (isOpen) {
+      fetchArticles().then(data => setArticles(data));
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 100);
@@ -33,7 +34,7 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  // Fuzzy instant search
+  // Instant search
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
@@ -41,21 +42,22 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
     }
 
     const lowerQuery = query.toLowerCase();
-    const filtered = ARTICLES.filter((article) => {
-      const author = AUTHORS[article.authorId]?.name || '';
+    const filtered = articles.filter((article) => {
+      const authorName = typeof article.author === 'object' ? article.author.name : (article.author || '');
       return (
         article.title.toLowerCase().includes(lowerQuery) ||
         article.excerpt.toLowerCase().includes(lowerQuery) ||
         article.category.toLowerCase().includes(lowerQuery) ||
-        author.toLowerCase().includes(lowerQuery)
+        authorName.toLowerCase().includes(lowerQuery)
       );
     });
     setResults(filtered);
-  }, [query]);
+  }, [query, articles]);
 
   if (!isOpen) return null;
 
-  const handleResultClick = (articleId) => {
+  const handleResultClick = (article) => {
+    const articleId = article.slug || article._id || article.id;
     onClose();
     onNavigate('article', articleId);
   };
@@ -95,12 +97,16 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
                 Found {results.length} article{results.length > 1 ? 's' : ''} matching your search
               </div>
               {results.map((article) => {
-                const author = AUTHORS[article.authorId];
+                const author = typeof article.author === 'object' ? article.author : { name: article.author || 'Anviksha Singh' };
+                const pubDate = article.publishedAt
+                  ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                  : article.date || 'Feb 2025';
+
                 return (
                   <div 
-                    key={article.id} 
+                    key={article._id || article.id} 
                     className="search-result-card"
-                    onClick={() => handleResultClick(article.id)}
+                    onClick={() => handleResultClick(article)}
                   >
                     <div className="search-result-image-wrapper">
                       <img src={article.coverImage} alt={article.title} loading="lazy" />
@@ -109,7 +115,7 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
                       <div className="search-result-meta">
                         <span className="search-result-category">{article.category}</span>
                         <span className="search-result-divider">&bull;</span>
-                        <span className="search-result-date"><Calendar size={12} style={{marginRight: 4}} /> {article.date}</span>
+                        <span className="search-result-date"><Calendar size={12} style={{marginRight: 4}} /> {pubDate}</span>
                       </div>
                       <h4 className="search-result-title">{article.title}</h4>
                       <p className="search-result-excerpt">{article.excerpt}</p>
@@ -133,3 +139,4 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
     </div>
   );
 }
+
