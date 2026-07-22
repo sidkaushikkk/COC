@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const rateLimit = require("express-rate-limit");
-
+const compression = require("compression");
 const morgan = require("morgan");
 
 
@@ -33,6 +33,7 @@ app.use(rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100
 }));
+app.use(compression());
 
 
 // Health Check
