@@ -56,16 +56,18 @@ export default function FeaturedArticle({ onNavigate }) {
             </p>
 
             {/* Author card snapshot */}
-            <div 
+            <a
               className="featured-author-card font-sans"
-              onClick={() => onNavigate('author', author.id)}
+              href={author.socials.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               <img src={author.photo} alt={author.name} className="featured-author-avatar" />
               <div className="featured-author-info">
                 <span className="featured-author-name">{author.name}</span>
                 <span className="featured-author-role">{author.role}</span>
               </div>
-            </div>
+            </a>
 
             <button 
               className="btn-primary"

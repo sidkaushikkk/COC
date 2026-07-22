@@ -54,14 +54,16 @@ export default function EditorsPicks({ onNavigate }) {
                     {article.excerpt}
                   </p>
 
-                  <div 
+                  <a
                     className="pick-author font-sans"
-                    onClick={() => onNavigate('author', author.id)}
+                    href={author.socials.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <span className="pick-author-by">By</span>
                     <span className="pick-author-name">{author.name}</span>
                     <span className="pick-author-title">({author.role})</span>
-                  </div>
+                  </a>
 
                   <button 
                     className="btn-text-arrow font-sans"

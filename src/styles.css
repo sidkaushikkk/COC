@@ -1014,7 +1014,7 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  cursor: pointer;
+  text-decoration: none;
 }
 .pick-author-by { color: var(--ink-light); }
 .pick-author-name {

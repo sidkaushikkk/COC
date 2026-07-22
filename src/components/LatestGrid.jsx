@@ -50,12 +50,14 @@ export default function LatestGrid({ onNavigate }) {
 
                   {/* Card Footer */}
                   <div className="card-footer font-sans">
-                    <span 
+                    <a
                       className="card-author-link"
-                      onClick={() => onNavigate('author', author.id)}
+                      href={author?.socials?.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       By {author?.name}
-                    </span>
+                    </a>
 
                     <div className="card-stats">
                       <span className="card-stat-item" title="Views">

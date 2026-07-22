@@ -131,7 +131,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
           <div className="article-hero-category font-sans">{article.category}</div>
           <h1 className="article-hero-title">{article.title}</h1>
           <div className="article-hero-byline font-sans">
-            <span>By <span className="byline-author-name">{author?.name}</span></span>
+            <span>By <a className="byline-author-name" href={author?.socials?.linkedin} target="_blank" rel="noopener noreferrer">{author?.name}</a></span>
             <span className="byline-sep">·</span>
             <span><Clock size={13} style={{ marginRight: 4, display: 'inline', verticalAlign: 'middle' }} />{article.readingTime}</span>
             <span className="byline-sep">·</span>
@@ -157,10 +157,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
 
         {/* Author Card */}
         {author && (
-          <div
-            className="article-author-card font-sans"
-            onClick={() => onNavigate('author', author.id)}
-          >
+          <div className="article-author-card font-sans">
             <img
               src={author.photo}
               alt={author.name}
@@ -168,7 +165,14 @@ export default function ArticlePage({ articleId, onNavigate }) {
             />
             <div className="article-author-info">
               <div className="article-author-label">About the Author</div>
-              <div className="article-author-name">{author.name}</div>
+              <a
+                className="article-author-name"
+                href={author.socials.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {author.name}
+              </a>
               <div className="article-author-role">{author.role}</div>
               <p className="article-author-bio">{author.bio}</p>
             </div>

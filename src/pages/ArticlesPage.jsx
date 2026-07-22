@@ -127,12 +127,14 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
                     </h3>
                     <p className="card-excerpt-text">{article.excerpt}</p>
                     <div className="card-footer font-sans">
-                      <span
+                      <a
                         className="card-author-link"
-                        onClick={() => onNavigate('author', author?.id)}
+                        href={author?.socials?.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         By {author?.name}
-                      </span>
+                      </a>
                       <div className="card-stats">
                         <span className="card-stat-item">
                           <Eye size={12} style={{ marginRight: 3 }} /> {article.views}

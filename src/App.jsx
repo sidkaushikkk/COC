@@ -13,7 +13,6 @@ import InteractiveTimeline from './components/InteractiveTimeline';
 import Footer from './components/Footer';
 import SearchOverlay from './components/SearchOverlay';
 import ArticlePage from './pages/ArticlePage';
-import AuthorPage from './pages/AuthorPage';
 import ArticlesPage from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
 
@@ -26,10 +25,6 @@ function getRouteFromHash() {
 
   if (page === 'article' && segments[1]) {
     return { page: 'article', param: decodeURIComponent(segments[1]), section: '' };
-  }
-
-  if (page === 'author' && segments[1]) {
-    return { page: 'author', param: decodeURIComponent(segments[1]), section: '' };
   }
 
   if (page === 'articles') {
@@ -48,7 +43,7 @@ function getHashForRoute(page, param = '') {
     return `#/?section=${encodeURIComponent(param.slice(1))}`;
   }
 
-  if ((page === 'article' || page === 'author') && param) {
+  if (page === 'article' && param) {
     return `#/${page}/${encodeURIComponent(param)}`;
   }
 
@@ -133,8 +128,6 @@ export default function App() {
         return <HomePage onNavigate={onNavigate} />;
       case 'article':
         return <ArticlePage articleId={currentParam} onNavigate={onNavigate} />;
-      case 'author':
-        return <AuthorPage authorId={currentParam} onNavigate={onNavigate} />;
       case 'articles':
         return <ArticlesPage categoryFilter={currentParam} onNavigate={onNavigate} />;
       case 'contact':

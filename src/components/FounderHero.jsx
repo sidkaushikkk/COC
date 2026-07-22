@@ -67,12 +67,6 @@ export default function FounderHero({ onNavigate }) {
           {/* Call to Actions */}
           <div className="founder-actions font-sans">
             <button 
-              className="btn-primary" 
-              onClick={() => onNavigate('author', 'julian-vance')}
-            >
-              Read My Story
-            </button>
-            <button 
               className="btn-secondary" 
               onClick={handleLatestArticlesClick}
             >
