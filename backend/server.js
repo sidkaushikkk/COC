@@ -8,7 +8,6 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 
 
-app.use(helmet());
 
 const articleRoutes = require('./routes/articleRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
@@ -18,6 +17,7 @@ const uploadRoutes = require('./routes/uploadRoutes');
 
 const app = express();
 
+app.use(helmet());
 // Connect to MongoDB
 connectDB();
 
