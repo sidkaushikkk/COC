@@ -1138,7 +1138,6 @@
   border-radius: 2px;
 }
 
-.trending-info { }
 .trending-title {
   font-family: 'Lora', serif;
   font-size: 15px;
@@ -2596,7 +2595,6 @@
   flex-shrink: 0;
 }
 
-.author-hero-content { }
 .author-hero-label {
   font-family: 'Inter', sans-serif;
   font-size: 11px;
