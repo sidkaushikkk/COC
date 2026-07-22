@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle, BookOpen, Link2, Users } from 'lucide-react';
+import { Mail, Send, CheckCircle, Users } from 'lucide-react';
 import Footer from '../components/Footer';
 
 export default function ContactPage({ onNavigate }) {
@@ -43,16 +43,9 @@ export default function ContactPage({ onNavigate }) {
           </div>
 
           <div className="contact-info-block">
-            <h3>Submission Hub</h3>
+            <h3>Ideas &amp; submissions</h3>
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.7 }}>
-              Want to contribute an article? Use our dedicated{' '}
-              <span
-                style={{ color: 'var(--gold-dark)', cursor: 'pointer', fontWeight: 600 }}
-                onClick={() => onNavigate('home', '#contribute')}
-              >
-                Contributor Form
-              </span>{' '}
-              for manuscript submissions.
+              Have a story, question, or editorial idea? Send it to the editorial desk and tell us why it belongs in the conversation.
             </p>
           </div>
 

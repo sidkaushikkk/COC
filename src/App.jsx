@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import FounderHero from './components/FounderHero';
-import WhyTimeline from './components/WhyTimeline';
+import PublicationHighlights from './components/PublicationHighlights';
 import FeaturedArticle from './components/FeaturedArticle';
-import TrendingRow from './components/TrendingRow';
-import EditorsPicks from './components/EditorsPicks';
-import LatestGrid from './components/LatestGrid';
-import TopicExplorer from './components/TopicExplorer';
 import NewsletterBox from './components/NewsletterBox';
-import ContributorForm from './components/ContributorForm';
-import InteractiveTimeline from './components/InteractiveTimeline';
+import AboutPublication from './components/AboutPublication';
 import Footer from './components/Footer';
 import SearchOverlay from './components/SearchOverlay';
 import ArticlePage from './pages/ArticlePage';
@@ -58,15 +53,10 @@ function HomePage({ onNavigate }) {
   return (
     <div className="page-enter">
       <FounderHero onNavigate={onNavigate} />
-      <WhyTimeline />
+      <PublicationHighlights />
       <FeaturedArticle onNavigate={onNavigate} />
-      <TrendingRow onNavigate={onNavigate} />
-      <EditorsPicks onNavigate={onNavigate} />
-      <LatestGrid onNavigate={onNavigate} />
-      <TopicExplorer onNavigate={onNavigate} />
+      <AboutPublication onNavigate={onNavigate} />
       <NewsletterBox />
-      <ContributorForm />
-      <InteractiveTimeline />
       <Footer onNavigate={onNavigate} />
     </div>
   );

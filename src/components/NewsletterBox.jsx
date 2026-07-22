@@ -18,9 +18,9 @@ export default function NewsletterBox() {
       <div className="container">
         <div className="newsletter-content-box">
           <span className="editorial-meta-tag">Circulation</span>
-          <h2 className="newsletter-heading">Stay Ahead of the Headlines</h2>
+          <h2 className="newsletter-heading">Make room for a better read.</h2>
           <p className="newsletter-description">
-            Join us and receive our long-form analysis of global capitalism and political systems every week. No ads. No clickbait.
+            Join the weekly dispatch for long-form analysis of politics, economics, and power. Independent, reader-supported, and free from clickbait.
           </p>
 
           {!subscribed ? (

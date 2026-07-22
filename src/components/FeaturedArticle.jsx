@@ -15,7 +15,7 @@ export default function FeaturedArticle({ onNavigate }) {
           <span className="editorial-meta-tag flex-align-center">
             <Sparkles size={14} style={{ marginRight: 6 }} /> Cover Story
           </span>
-          <h2 className="section-title">The Featured Essay</h2>
+          <h2 className="section-title">The latest issue</h2>
         </div>
 
         <div className="featured-article-grid">
@@ -56,18 +56,13 @@ export default function FeaturedArticle({ onNavigate }) {
             </p>
 
             {/* Author card snapshot */}
-            <a
-              className="featured-author-card font-sans"
-              href={author.socials.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <div className="featured-author-card font-sans">
               <img src={author.photo} alt={author.name} className="featured-author-avatar" />
               <div className="featured-author-info">
                 <span className="featured-author-name">{author.name}</span>
                 <span className="featured-author-role">{author.role}</span>
               </div>
-            </a>
+            </div>
 
             <button 
               className="btn-primary"

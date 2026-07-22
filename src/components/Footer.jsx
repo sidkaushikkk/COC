@@ -59,7 +59,7 @@ export default function Footer({ onNavigate }) {
               <li><a href="#/" onClick={(e) => { e.preventDefault(); handleLinkClick('home', ''); }}>Home</a></li>
               <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', ''); }}>All Articles</a></li>
               <li><a href="#/about" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#about'); }}>Our Philosophy</a></li>
-              <li><a href="#/contribute" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#contribute'); }}>Write For Us</a></li>
+              <li><a href="#/newsletter" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#newsletter'); }}>Subscribe</a></li>
             </ul>
           </div>
 
@@ -78,7 +78,7 @@ export default function Footer({ onNavigate }) {
             <address className="footer-address">
               <p>Independent Editorial Press</p>
               <p>Email: <a href="mailto:editors@childrenofcapital.org" className="underline-link">editors@childrenofcapital.org</a></p>
-              <p>Submission Hub: OWNER_EMAIL_PLACEHOLDER</p>
+              <p>Reader-supported, independent publishing.</p>
             </address>
             <div className="footer-socials">
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><Link2 size={18} /></a>
