@@ -15,8 +15,14 @@ const app = express();
 connectDB();
 
 // Middlewares
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      "https://YOUR_PROJECT.vercel.app",
+      "http://localhost:5173"
+    ]
+  })
+);app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health Check

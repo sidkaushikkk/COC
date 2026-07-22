@@ -75,7 +75,7 @@ const submitArticle = async (req, res) => {
     });
 
     // 2. Send email notification to OWNER_EMAIL
-    const ownerEmail = process.env.OWNER_EMAIL || 'anvikshasingh583@gmail.com';
+    const ownerEmail = process.env.OWNER_EMAIL || 'ksiddhant705@gmail.com';
     const emailSubject = `[Submission Request] - "${title}" by ${name}`;
     
     const emailText = `
