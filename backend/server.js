@@ -2,6 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const rateLimit = require("express-rate-limit");
+
+const morgan = require("morgan");
+
 
 const articleRoutes = require('./routes/articleRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
@@ -24,6 +28,12 @@ app.use(
   })
 );app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+}));
+
 
 // Health Check
 app.get('/health', (req, res) => {
