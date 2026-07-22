@@ -1,14 +1,5 @@
 const mongoose = require("mongoose");
 
-app.get("/health", (req, res) => {
-  res.json({
-    status: "OK",
-    database:
-      mongoose.connection.readyState === 1
-        ? "Connected"
-        : "Disconnected"
-  });
-});
 
 const connectDB = async () => {
   try {
