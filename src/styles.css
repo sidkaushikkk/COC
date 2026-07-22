@@ -465,8 +465,8 @@
 
 .founder-title-sub {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--gold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -715,7 +715,8 @@
 
 .hero-author-note {
   justify-self: end;
-  width: min(100%, 250px);
+  width: min(100%, 400px);
+  height: min(100%, 250px);
   padding: 18px;
   background: rgba(13, 27, 39, 0.76);
   border: 1px solid rgba(232, 213, 183, 0.38);
@@ -735,7 +736,7 @@
 }
 
 .hero-author-profile { display: flex; align-items: center; gap: 12px; }
-.hero-author-profile img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 42%; border: 1px solid var(--gold); }
+.hero-author-profile img { width: 200px; height: 170px; border-radius: 50%; object-fit: cover; object-position: 50% 42%; border: 1px solid var(--gold); }
 .hero-author-profile strong { display: block; color: var(--cream); font-family: 'Lora', serif; font-size: 16px; font-weight: 600; }
 .hero-author-profile p { margin-top: 3px; color: rgba(248,246,242,0.58); font-family: 'Inter', sans-serif; font-size: 11px; line-height: 1.45; }
 

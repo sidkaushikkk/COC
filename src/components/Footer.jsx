@@ -63,28 +63,13 @@ export default function Footer({ onNavigate }) {
             </ul>
           </div>
 
-          <div className="footer-column">
-            <h4>Categories</h4>
-            <ul>
-              <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', '?cat=Capitalism'); }}>Capitalism</a></li>
-              <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', '?cat=Economics'); }}>Economics</a></li>
-              <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', '?cat=Politics'); }}>Politics</a></li>
-              <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', '?cat=Climate'); }}>Climate</a></li>
-            </ul>
-          </div>
 
           <div className="footer-column font-sans">
             <h4>Editorial Office</h4>
             <address className="footer-address">
-              <p>Independent Editorial Press</p>
-              <p>Email: <a href="mailto:editors@childrenofcapital.org" className="underline-link">editors@childrenofcapital.org</a></p>
+              <p>Email: <a href="mailto:anvikshasingh583@gmail.com" className="underline-link">anvikshasingh583@gmail.com</a></p>
               <p>Reader-supported, independent publishing.</p>
             </address>
-            <div className="footer-socials">
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><Link2 size={18} /></a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Users size={18} /></a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="Github"><Share2 size={18} /></a>
-            </div>
           </div>
         </div>
       </div>

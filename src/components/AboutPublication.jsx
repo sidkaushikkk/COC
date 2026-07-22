@@ -34,7 +34,7 @@ export default function AboutPublication({ onNavigate }) {
             Every word and every story is driven by the belief that knowledge can change the terms of public conversation. We explore politics, economics, capitalism, global affairs, society, justice, climate, and history—not as isolated subjects, but as connected systems.
           </p>
           <button className="about-publication-link" onClick={() => onNavigate('articles', '')}>
-            Explore the archive <ArrowUpRight size={15} />
+            Explore our Articles <ArrowUpRight size={15} />
           </button>
         </div>
 
@@ -57,8 +57,8 @@ export default function AboutPublication({ onNavigate }) {
             </div>
             <div className="about-author-copy">
               <span>Written by</span>
-              <h3>The Editor</h3>
-              <p>Writer and editor behind Children of Capital.</p>
+              <h3>Anviksha Singh</h3>
+              <p>Founder and editor of Children of Capital.</p>
             </div>
           </aside>
         </div>

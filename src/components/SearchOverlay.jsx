@@ -109,8 +109,6 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
                       <div className="search-result-meta">
                         <span className="search-result-category">{article.category}</span>
                         <span className="search-result-divider">&bull;</span>
-                        <span className="search-result-readtime"><Clock size={12} style={{marginRight: 4}} /> {article.readingTime}</span>
-                        <span className="search-result-divider">&bull;</span>
                         <span className="search-result-date"><Calendar size={12} style={{marginRight: 4}} /> {article.date}</span>
                       </div>
                       <h4 className="search-result-title">{article.title}</h4>

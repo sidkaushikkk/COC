@@ -39,8 +39,8 @@ export default function FounderHero({ onNavigate }) {
             <button className="publication-btn-primary" onClick={() => scrollTo('newsletter')}>
               Subscribe to the newsletter <ArrowRight size={16} />
             </button>
-            <button className="publication-btn-secondary" onClick={() => scrollTo('featured-section')}>
-              Read the latest issue
+            <button className="publication-btn-secondary" onClick={() => onNavigate('articles', '')}>
+              Read the latest articles
             </button>
           </div>
 
@@ -56,8 +56,8 @@ export default function FounderHero({ onNavigate }) {
           <div className="hero-author-profile">
             <img src={authorPhoto} alt="The editor of Children of Capital" />
             <div>
-              <strong>The Editor</strong>
-              <p>Writer and editor of Children of Capital.</p>
+              <strong>Anviksha Singh</strong>
+              <p>Founder and editor of Children of Capital.</p>
             </div>
           </div>
         </aside>

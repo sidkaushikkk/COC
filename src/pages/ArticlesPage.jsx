@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { ARTICLES, AUTHORS, CATEGORIES } from '../data/mockData';
-import { Clock, Eye, Heart, Calendar, SlidersHorizontal } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import Footer from '../components/Footer';
 
 export default function ArticlesPage({ categoryFilter, onNavigate }) {
@@ -12,7 +12,6 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
   }, [categoryFilter]);
 
   const [activeCategory, setActiveCategory] = useState(initialCat);
-  const [sortBy, setSortBy] = useState('date');
 
   // Sync when categoryFilter prop changes (e.g., navigating from TopicExplorer)
   useEffect(() => {
@@ -20,23 +19,10 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
   }, [initialCat]);
 
   const filteredArticles = useMemo(() => {
-    let list = activeCategory === 'All'
+    return activeCategory === 'All'
       ? [...ARTICLES]
       : ARTICLES.filter(a => a.category === activeCategory);
-
-    if (sortBy === 'trending') {
-      list = list.sort((a, b) => {
-        const aViews = parseInt(a.views?.replace(/,/g, '') || '0');
-        const bViews = parseInt(b.views?.replace(/,/g, '') || '0');
-        return bViews - aViews;
-      });
-    } else if (sortBy === 'likes') {
-      list = list.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-    }
-    // Default: date order (as they appear in mockData, newest first)
-
-    return list;
-  }, [activeCategory, sortBy]);
+  }, [activeCategory]);
 
   const categories = ['All', ...CATEGORIES];
 
@@ -50,53 +36,15 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
           <p className="articles-page-desc font-sans">
             Long-form essays on capital, power, and the systems that shape our world.
           </p>
-
-          {/* Category Filter Pills */}
-          <div className="articles-filter-bar">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                className={`filter-pill font-sans ${activeCategory === cat ? 'active-filter' : ''}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
       {/* Article Grid */}
       <div className="articles-main-content">
-        {/* Count + Sort Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 32 }}>
+        <div style={{ marginBottom: 32 }}>
           <div className="articles-count-bar">
             {filteredArticles.length} essay{filteredArticles.length !== 1 ? 's' : ''}
             {activeCategory !== 'All' ? ` in ${activeCategory}` : ''}
-          </div>
-
-          {/* Sort Control */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <SlidersHorizontal size={14} style={{ color: 'var(--ink-light)' }} />
-            <select
-              value={sortBy}
-              onChange={e => setSortBy(e.target.value)}
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--ink-muted)',
-                background: 'none',
-                border: 'none',
-                outline: 'none',
-                cursor: 'pointer',
-                letterSpacing: '0.04em',
-              }}
-            >
-              <option value="date">Most Recent</option>
-              <option value="trending">Most Viewed</option>
-              <option value="likes">Most Liked</option>
-            </select>
           </div>
         </div>
 
@@ -115,8 +63,6 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
                   </div>
                   <div className="card-content-body">
                     <div className="card-meta font-sans">
-                      <span><Clock size={12} className="meta-inline-icon" /> {article.readingTime}</span>
-                      <span className="meta-bullet">·</span>
                       <span><Calendar size={12} className="meta-inline-icon" /> {article.date}</span>
                     </div>
                     <h3
@@ -135,14 +81,6 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
                       >
                         By {author?.name}
                       </a>
-                      <div className="card-stats">
-                        <span className="card-stat-item">
-                          <Eye size={12} style={{ marginRight: 3 }} /> {article.views}
-                        </span>
-                        <span className="card-stat-item">
-                          <Heart size={12} style={{ marginRight: 3, fill: '#7A1C1C', stroke: '#7A1C1C' }} /> {article.likes}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </article>

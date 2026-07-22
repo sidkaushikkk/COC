@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ARTICLES, AUTHORS } from '../data/mockData';
-import { Clock, Calendar, ChevronLeft } from 'lucide-react';
+import { Calendar, ChevronLeft } from 'lucide-react';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
 function parseBold(text) {
@@ -132,8 +132,6 @@ export default function ArticlePage({ articleId, onNavigate }) {
           <h1 className="article-hero-title">{article.title}</h1>
           <div className="article-hero-byline font-sans">
             <span>By <a className="byline-author-name" href={author?.socials?.linkedin} target="_blank" rel="noopener noreferrer">{author?.name}</a></span>
-            <span className="byline-sep">·</span>
-            <span><Clock size={13} style={{ marginRight: 4, display: 'inline', verticalAlign: 'middle' }} />{article.readingTime}</span>
             <span className="byline-sep">·</span>
             <span><Calendar size={13} style={{ marginRight: 4, display: 'inline', verticalAlign: 'middle' }} />{article.date}</span>
             <span className="byline-sep">·</span>

@@ -36,9 +36,9 @@ export default function ContactPage({ onNavigate }) {
         <div className="contact-info-col">
           <div className="contact-info-block">
             <h3>Editorial Desk</h3>
-            <a href="mailto:editors@childrenofcapital.org">
+            <a href="mailto:anvikshasingh583@gmail.com">
               <Mail size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
-              editors@childrenofcapital.org
+              anvikshasingh583@gmail.com
             </a>
           </div>
 
@@ -54,7 +54,7 @@ export default function ContactPage({ onNavigate }) {
             <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
               
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/children-of-capital/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: 'var(--ink-muted)', transition: 'color 0.25s' }}

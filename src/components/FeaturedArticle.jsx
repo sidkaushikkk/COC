@@ -1,6 +1,6 @@
 import React from 'react';
 import { ARTICLES, AUTHORS } from '../data/mockData';
-import { Clock, Sparkles, BookOpen } from 'lucide-react';
+import { Sparkles, BookOpen } from 'lucide-react';
 
 export default function FeaturedArticle({ onNavigate }) {
   const featuredArticle = ARTICLES.find(a => a.isFeatured) || ARTICLES[0];
@@ -38,8 +38,6 @@ export default function FeaturedArticle({ onNavigate }) {
           <div className="featured-content-wrapper">
             <div className="featured-meta font-sans">
               <span className="featured-category-badge">{featuredArticle.category}</span>
-              <span className="featured-divider">&bull;</span>
-              <span><Clock size={12} className="meta-inline-icon" /> {featuredArticle.readingTime}</span>
               <span className="featured-divider">&bull;</span>
               <span><BookOpen size={12} className="meta-inline-icon" /> {featuredArticle.date}</span>
             </div>
