@@ -1,6 +1,3 @@
-const mongoose = require('mongoose');
-
-
 const mongoose = require("mongoose");
 
 app.get("/health", (req, res) => {
