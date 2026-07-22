@@ -5,7 +5,10 @@ const connectDB = require('./config/db');
 const rateLimit = require("express-rate-limit");
 const compression = require("compression");
 const morgan = require("morgan");
+const helmet = require("helmet");
 
+
+app.use(helmet());
 
 const articleRoutes = require('./routes/articleRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
@@ -22,7 +25,7 @@ connectDB();
 app.use(
   cors({
     origin: [
-      "https://YOUR_PROJECT.vercel.app",
+      process.env.FRONTEND_URL,
       "http://localhost:5173"
     ]
   })
@@ -67,8 +70,10 @@ app.use((err, req, res, next) => {
   console.error('Unhandled Error:', err);
   res.status(err.status || 500).json({
     success: false,
-    message: err.message || 'Internal Server Error'
-  });
+message:
+  process.env.NODE_ENV === "production"
+    ? "Internal Server Error"
+    : err.message  });
 });
 
 const PORT = process.env.PORT || 5000;
