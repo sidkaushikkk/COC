@@ -22,9 +22,24 @@ const articleSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Excerpt is required']
     },
-    content: {
-      type: String,
-      required: [true, 'Content is required']
+content: {
+  type: [
+    {
+      type: {
+        type: String,
+        required: true
+      },
+      text: {
+        type: String,
+        required: true
+      },
+      level: Number,
+      author: String,
+      url: String,
+      caption: String
+    }
+  ],
+  required: true
     },
     category: {
       type: String,
