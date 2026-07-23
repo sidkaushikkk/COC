@@ -318,20 +318,12 @@ Deploy on:
 
 - Vercel
 
-Set:
-
-```
-VITE_API_URL=https://your-backend-url.com
-```
-
----
 
 ## Backend
 
 Deploy on:
 
 - Render
-- Railway
 
 Environment variables should match your local `.env`.
 
@@ -364,19 +356,6 @@ cd backend
 
 npm start
 ```
-
----
-
-# 📌 Future Improvements
-
-- Admin dashboard
-- Article approval panel
-- Rich text editor
-- Authentication
-- Comments
-- Reading analytics
-- Bookmark synchronization
-- Social authentication
 
 ---
 
