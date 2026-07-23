@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchArticles } from '../services/api';
 import { Sparkles, BookOpen } from 'lucide-react';
+import authorPhoto from '../assets/author.webp';
 
 export default function FeaturedArticle({ onNavigate }) {
   const [featuredArticle, setFeaturedArticle] = useState(null);
@@ -20,7 +21,7 @@ export default function FeaturedArticle({ onNavigate }) {
   const author = typeof featuredArticle.author === 'object' ? featuredArticle.author : {
     name: featuredArticle.author || 'Anviksha Singh',
     role: 'Founder & Editor, Children of Capital',
-    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+    photo: authorPhoto
   };
 
   const pubDate = featuredArticle.publishedAt

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetchArticles, fetchArticleBySlug } from '../services/api';
 import { Calendar, ChevronLeft } from 'lucide-react';
+import authorPhoto from '../assets/author.webp';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
 function parseBold(text) {
@@ -135,7 +136,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
       name: article.author || 'Anviksha Singh',
       role: 'Founder & Editor, Children of Capital',
       bio: 'The editor of Children of Capital writes about the systems that shape public life.',
-      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      photo: authorPhoto,
       linkedin: 'https://www.linkedin.com/in/anviksha-singh-children-of-capital/'
     };
   }, [article]);
