@@ -22,7 +22,7 @@ The Menu, is the refreshing, macabre and poetically accurate prognosis of the ca
       name: 'Anviksha Singh',
       role: 'Founder & Editor, Children of Capital',
       bio: 'The editor of Children of Capital writes about the systems that shape public life, with a focus on political economy, power, and social change.',
-      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      photo: 'src/assets/author.webp',
       linkedin: 'https://www.linkedin.com/in/anviksha-singh-children-of-capital/'
     },
     featured: true,
@@ -47,7 +47,7 @@ In our postmodern times where ring lights, selfie stands and makeup filters abou
       name: 'Anviksha Singh',
       role: 'Founder & Editor, Children of Capital',
       bio: 'The editor of Children of Capital writes about the systems that shape public life, with a focus on political economy, power, and social change.',
-      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      photo: 'src/assets/author.webp',
       linkedin: 'https://www.linkedin.com/in/anviksha-singh-children-of-capital/'
     },
     featured: true,
