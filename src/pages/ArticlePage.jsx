@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetchArticles, fetchArticleBySlug } from '../services/api';
 import { Calendar, ChevronLeft } from 'lucide-react';
+import authorPhoto from '../assets/author.webp';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
 function parseBold(text) {
@@ -11,96 +12,60 @@ function parseBold(text) {
   );
 }
 
-function renderContent(rawContent) {
-  if (!rawContent) return null;
-  const lines = rawContent.trim().split('\n');
-  const elements = [];
-  let i = 0;
+function renderContent(content) {
+  if (!content) return null;
 
-  while (i < lines.length) {
-    const raw = lines[i];
-    const line = raw.trim();
-
-    if (!line) { i++; continue; }
-
-    // H3 heading
-    if (line.startsWith('### ')) {
-      elements.push(<h3 key={i}>{parseBold(line.slice(4))}</h3>);
-      i++;
-      continue;
-    }
-
-    // Blockquote block
-    if (line.startsWith('> ')) {
-      const quoteLines = [];
-      while (i < lines.length && lines[i].trim().startsWith('> ')) {
-        quoteLines.push(lines[i].trim().replace(/^> /, ''));
-        i++;
-      }
-      elements.push(
-        <blockquote key={`bq-${i}`}>
-          {quoteLines.map((ql, qi) => <p key={qi}>{parseBold(ql)}</p>)}
-        </blockquote>
-      );
-      continue;
-    }
-
-    // Table block
-    if (line.startsWith('| ')) {
-      const tableLines = [];
-      while (i < lines.length && lines[i].trim().startsWith('|')) {
-        tableLines.push(lines[i].trim());
-        i++;
-      }
-      // Filter out separator rows like |---|---|
-      const rows = tableLines.filter(l => !l.match(/^\|[\s:|-]+\|$/));
-      elements.push(
-        <div key={`table-${i}`} className="article-table-wrapper">
-          <table>
-            <tbody>
-              {rows.map((row, ri) => {
-                const cells = row.split('|').filter(c => c !== undefined && c !== '').map(c => c.trim());
-                const Tag = ri === 0 ? 'th' : 'td';
-                return (
-                  <tr key={ri}>
-                    {cells.map((cell, ci) => (
-                      <Tag key={ci}>{parseBold(cell)}</Tag>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      );
-      continue;
-    }
-
-    // Numbered list block
-    if (/^\d+\.\s/.test(line)) {
-      const listItems = [];
-      while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
-        listItems.push(lines[i].trim().replace(/^\d+\.\s/, ''));
-        i++;
-      }
-      elements.push(
-        <ol key={`ol-${i}`}>
-          {listItems.map((item, li) => (
-            <li key={li}>{parseBold(item)}</li>
-          ))}
-        </ol>
-      );
-      continue;
-    }
-
-    // Paragraph
-    elements.push(<p key={i}>{parseBold(line)}</p>);
-    i++;
+  // Backward compatibility: support old markdown string articles
+  if (typeof content === "string") {
+    return content.split("\n").map((line, index) =>
+      line.trim() ? <p key={index}>{parseBold(line)}</p> : null
+    );
   }
 
-  return elements;
-}
+  // New block-based content
+  if (Array.isArray(content)) {
+    return content.map((block, index) => {
+      switch (block.type) {
+        case "heading":
+          return (
+            <h2 key={index}>
+              {parseBold(block.text)}
+            </h2>
+          );
 
+        case "quote":
+          return (
+            <blockquote key={index}>
+              <p>{parseBold(block.text)}</p>
+              {block.author && (
+                <footer>— {block.author}</footer>
+              )}
+            </blockquote>
+          );
+
+        case "image":
+          return (
+            <figure key={index}>
+              <img src={block.url} alt={block.caption || ""} />
+              {block.caption && (
+                <figcaption>{block.caption}</figcaption>
+              )}
+            </figure>
+          );
+
+        case "paragraph":
+        default:
+          return (
+            <p key={index}>
+              {parseBold(block.text)}
+            </p>
+          );
+      }
+    });
+  }
+
+  return null;
+}
 /* ── Component ────────────────────────────────────────────────── */
 export default function ArticlePage({ articleId, onNavigate }) {
   const [article, setArticle] = useState(null);
@@ -135,7 +100,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
       name: article.author || 'Anviksha Singh',
       role: 'Founder & Editor, Children of Capital',
       bio: 'The editor of Children of Capital writes about the systems that shape public life.',
-      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      photo: authorPhoto,
       linkedin: 'https://www.linkedin.com/in/anviksha-singh-children-of-capital/'
     };
   }, [article]);
@@ -257,4 +222,3 @@ export default function ArticlePage({ articleId, onNavigate }) {
     </div>
   );
 }
-
