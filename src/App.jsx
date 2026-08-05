@@ -187,6 +187,7 @@ function MainContent() {
           <Route path="/" element={<HomePage onNavigate={onNavigate} />} />
           <Route path="/articles" element={<ArticlesPageWrapper onNavigate={onNavigate} />} />
           <Route path="/article/:slug" element={<ArticlePageWrapper onNavigate={onNavigate} />} />
+          <Route path="/article" element={<NotFoundPage />} />
           <Route path="/contact" element={<ContactPage onNavigate={onNavigate} />} />
           <Route path="/submission-hub" element={<SubmissionHubPage onNavigate={onNavigate} />} />
           <Route path="/submission" element={<Navigate to="/submission-hub" replace />} />

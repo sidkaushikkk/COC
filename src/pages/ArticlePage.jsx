@@ -114,10 +114,9 @@ export default function ArticlePage({ articleId, onNavigate }) {
           setArticle(null);
           setNotFound(true);
           setLoading(false);
-        } else if (data && data.length > 0) {
-          setArticle(data[0]);
-          setLoading(false);
         } else {
+          // No articleId provided -> return 404 page
+          setArticle(null);
           setNotFound(true);
           setLoading(false);
         }
