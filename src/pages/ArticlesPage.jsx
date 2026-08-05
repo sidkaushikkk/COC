@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { CATEGORIES } from '../data/mockData';
 import { fetchArticles } from '../services/api';
 import { Calendar } from 'lucide-react';
 import Footer from '../components/Footer';

@@ -63,10 +63,6 @@ export default function FounderHero({ onNavigate }) {
         </aside>
       </div>
 
-      <button className="publication-scroll-indicator" onClick={() => scrollTo('highlights')} aria-label="Explore the newsletter">
-        <span>Explore the publication</span>
-        <ArrowDown size={15} className="animate-bounce" />
-      </button>
     </header>
   );
 }

@@ -51,6 +51,18 @@ const submissionSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    tags: {
+      type: [String],
+      default: []
+    },
+    references: {
+      type: String,
+      default: ''
+    },
+    attachment: {
+      type: String,
+      default: ''
+    },
     status: {
       type: String,
       enum: ['pending', 'approved', 'rejected'],

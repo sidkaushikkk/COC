@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Share2, Link2, Users, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 
 export default function Footer({ onNavigate }) {
   const [email, setEmail] = useState('');
@@ -58,6 +58,7 @@ export default function Footer({ onNavigate }) {
             <ul>
               <li><a href="#/" onClick={(e) => { e.preventDefault(); handleLinkClick('home', ''); }}>Home</a></li>
               <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', ''); }}>All Articles</a></li>
+              <li><a href="#/submission-hub" onClick={(e) => { e.preventDefault(); handleLinkClick('submission-hub', ''); }}>Submission Hub</a></li>
               <li><a href="#/about" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#about'); }}>Our Philosophy</a></li>
               <li><a href="#/newsletter" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#newsletter'); }}>Subscribe</a></li>
             </ul>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetchArticles, fetchArticleBySlug } from '../services/api';
-import { Calendar, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
@@ -143,6 +143,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
           <div className="article-hero-byline font-sans">
             <span>By <a className="byline-author-name" href={author?.linkedin || '#'} target="_blank" rel="noopener noreferrer">{author?.name}</a></span>
             <span className="byline-sep">·</span>
+            <span>{pubDate}</span>
             <span className="byline-sep">·</span>
             <span style={{ background: 'rgba(197,168,128,0.2)', padding: '2px 8px', borderRadius: 2, fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.8)' }}>{article.readingTime || 'Advanced'}</span>
           </div>

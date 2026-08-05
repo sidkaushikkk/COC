@@ -35,7 +35,10 @@ const submitArticle = async (req, res) => {
       content,
       bio,
       linkedin,
-      website
+      website,
+      tags,
+      references,
+      attachment: attachmentUrl
     } = req.body;
 
     if (!name || !email || !title || !category || !content) {
@@ -46,15 +49,38 @@ const submitArticle = async (req, res) => {
     }
 
     let finalCoverImage = coverImageUrl || '';
+    let finalAttachment = attachmentUrl || '';
 
-    // If an image file was attached via multipart form-data, upload to Cloudinary
+    // Handle uploaded files via Multer
     if (req.file) {
       try {
         finalCoverImage = await uploadToCloudinary(req.file.buffer);
       } catch (uploadError) {
         console.warn('Cloudinary upload warning:', uploadError.message);
-        // Keep string coverImageUrl if Cloudinary config isn't set up yet
       }
+    } else if (req.files) {
+      if (req.files.coverImage && req.files.coverImage[0]) {
+        try {
+          finalCoverImage = await uploadToCloudinary(req.files.coverImage[0].buffer);
+        } catch (err) {
+          console.warn('Cover image upload error:', err.message);
+        }
+      }
+      if (req.files.attachment && req.files.attachment[0]) {
+        try {
+          finalAttachment = await uploadToCloudinary(req.files.attachment[0].buffer);
+        } catch (err) {
+          console.warn('Attachment upload error:', err.message);
+        }
+      }
+    }
+
+    // Process tags (array or string)
+    let parsedTags = [];
+    if (Array.isArray(tags)) {
+      parsedTags = tags;
+    } else if (typeof tags === 'string' && tags.trim()) {
+      parsedTags = tags.split(',').map(t => t.trim()).filter(Boolean);
     }
 
     // 1. Store in MongoDB with status = 'pending'
@@ -70,6 +96,9 @@ const submitArticle = async (req, res) => {
       bio: bio || '',
       linkedin: linkedin || '',
       website: website || '',
+      tags: parsedTags,
+      references: references || '',
+      attachment: finalAttachment,
       status: 'pending',
       submittedAt: new Date()
     });

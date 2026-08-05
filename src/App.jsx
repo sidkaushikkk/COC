@@ -10,6 +10,7 @@ import SearchOverlay from './components/SearchOverlay';
 import ArticlePage from './pages/ArticlePage';
 import ArticlesPage from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
+import SubmissionHubPage from './pages/SubmissionHubPage';
 
 function getRouteFromHash() {
   const hash = window.location.hash.replace(/^#/, '');
@@ -30,6 +31,10 @@ function getRouteFromHash() {
     return { page: 'contact', param: '', section: '' };
   }
 
+  if (page === 'submission-hub' || page === 'submit') {
+    return { page: 'submission-hub', param: '', section: '' };
+  }
+
   return { page: 'home', param: '', section: params.get('section') || '' };
 }
 
@@ -44,6 +49,10 @@ function getHashForRoute(page, param = '') {
 
   if (page === 'articles') {
     return `#/articles${param.startsWith('?') ? param : ''}`;
+  }
+
+  if (page === 'submission-hub' || page === 'submit') {
+    return '#/submission-hub';
   }
 
   return page === 'contact' ? '#/contact' : '#/';
@@ -122,6 +131,8 @@ export default function App() {
         return <ArticlesPage categoryFilter={currentParam} onNavigate={onNavigate} />;
       case 'contact':
         return <ContactPage onNavigate={onNavigate} />;
+      case 'submission-hub':
+        return <SubmissionHubPage onNavigate={onNavigate} />;
       default:
         return <HomePage onNavigate={onNavigate} />;
     }

@@ -55,10 +55,17 @@ export default function ContactPage({ onNavigate }) {
           </div>
 
           <div className="contact-info-block">
-            <h3>Ideas &amp; submissions</h3>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.7 }}>
-              Have a story, question, or editorial idea? Send it to the editorial desk and tell us why it belongs in the conversation.
+            <h3>Ideas &amp; Submissions</h3>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.7, marginBottom: 10 }}>
+              Have a story, analytical article, or manuscript? Submit directly through our Submission Hub.
             </p>
+            <a 
+              href="#/submission-hub" 
+              onClick={(e) => { e.preventDefault(); onNavigate('submission-hub'); }}
+              className="btn-text-arrow"
+            >
+              Go to Submission Hub <span className="arrow-char">&rarr;</span>
+            </a>
           </div>
 
           <div className="contact-info-block">
