@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchArticles } from '../services/api';
 import { Calendar } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -10,14 +11,14 @@ const articlesJsonLd = [
     '@type': 'WebPage',
     name: 'All Articles & Dispatches | Children of Capital',
     description: 'Explore long-form analytical essays dissecting politics, economics, capital structures, and power.',
-    url: 'https://childrenofcapital.vercel.app/#/articles'
+    url: 'https://childrenofcapital.vercel.app/articles'
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.vercel.app/' },
-      { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.vercel.app/#/articles' }
+      { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.vercel.app/articles' }
     ]
   }
 ];
@@ -56,7 +57,7 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
       <SEO
         title={activeCategory !== 'All' ? `${activeCategory} Articles | Children of Capital` : 'All Articles & Dispatches | Children of Capital'}
         description={`Read analytical essays on ${activeCategory !== 'All' ? activeCategory : 'politics, economics, and power'} published by Children of Capital.`}
-        canonical={activeCategory !== 'All' ? `https://childrenofcapital.vercel.app/#/articles?cat=${encodeURIComponent(activeCategory)}` : 'https://childrenofcapital.vercel.app/#/articles'}
+        canonical={activeCategory !== 'All' ? `https://childrenofcapital.vercel.app/articles?cat=${encodeURIComponent(activeCategory)}` : 'https://childrenofcapital.vercel.app/articles'}
         jsonLd={articlesJsonLd}
       />
       {/* Page Header */}
@@ -83,6 +84,7 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
           <div className="articles-full-grid">
             {filteredArticles.map(article => {
               const articleId = article.slug || article._id || article.id;
+              const articleUrl = `/article/${encodeURIComponent(articleId)}`;
               const authorObj = typeof article.author === 'object' ? article.author : { name: article.author || 'Anviksha Singh' };
               const pubDate = article.publishedAt
                 ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -90,22 +92,26 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
 
               return (
                 <article key={article._id || article.id} className="article-card">
-                  <div
+                  <Link
+                    to={articleUrl}
                     className="card-image-wrapper"
-                    onClick={() => onNavigate('article', articleId)}
+                    style={{ textDecoration: 'none', display: 'block' }}
                   >
                     <img src={article.coverImage} alt={article.title} loading="lazy" />
                     <div className="card-category-badge font-sans">{article.category}</div>
-                  </div>
+                  </Link>
                   <div className="card-content-body">
                     <div className="card-meta font-sans">
                       <span><Calendar size={12} className="meta-inline-icon" /> {pubDate}</span>
                     </div>
-                    <h3
-                      className="card-title-heading"
-                      onClick={() => onNavigate('article', articleId)}
-                    >
-                      {article.title}
+                    <h3>
+                      <Link
+                        to={articleUrl}
+                        className="card-title-heading"
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                      >
+                        {article.title}
+                      </Link>
                     </h3>
                     <p className="card-excerpt-text">{article.excerpt}</p>
                     <div className="card-footer font-sans">

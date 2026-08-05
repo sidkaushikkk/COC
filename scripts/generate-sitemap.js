@@ -9,9 +9,9 @@ const BASE_URL = 'https://childrenofcapital.vercel.app';
 
 const staticRoutes = [
   { path: '', priority: '1.0', changefreq: 'daily' },
-  { path: '#/articles', priority: '0.9', changefreq: 'daily' },
-  { path: '#/submission-hub', priority: '0.8', changefreq: 'weekly' },
-  { path: '#/contact', priority: '0.7', changefreq: 'monthly' }
+  { path: 'articles', priority: '0.9', changefreq: 'daily' },
+  { path: 'submission-hub', priority: '0.8', changefreq: 'weekly' },
+  { path: 'contact', priority: '0.7', changefreq: 'monthly' }
 ];
 
 async function generateSitemap() {
@@ -47,7 +47,7 @@ async function generateSitemap() {
 
     // Dynamic Article routes
     articleIds.forEach(id => {
-      const cleanUrl = `${BASE_URL}/#/article/${encodeURIComponent(id)}`;
+      const cleanUrl = `${BASE_URL}/article/${encodeURIComponent(id)}`;
       xml += `  <url>\n`;
       xml += `    <loc>${cleanUrl}</loc>\n`;
       xml += `    <lastmod>${today}</lastmod>\n`;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { X, Search, Calendar, ArrowRight } from 'lucide-react';
 import { fetchArticles } from '../services/api';
 
@@ -7,6 +8,7 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
   const [articles, setArticles] = useState([]);
   const [results, setResults] = useState([]);
   const searchInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -59,7 +61,11 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
   const handleResultClick = (article) => {
     const articleId = article.slug || article._id || article.id;
     onClose();
-    onNavigate('article', articleId);
+    if (onNavigate) {
+      onNavigate('article', articleId);
+    } else {
+      navigate(`/article/${encodeURIComponent(articleId)}`);
+    }
   };
 
   return (
@@ -94,16 +100,14 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
                 <p style={{ fontSize: 14, color: 'var(--navy)', fontWeight: 600 }}>
                   Interested in contributing an essay?
                 </p>
-                <button
+                <Link
+                  to="/submission-hub"
                   className="btn-text-arrow"
-                  onClick={() => {
-                    onClose();
-                    onNavigate('submission-hub');
-                  }}
-                  style={{ marginTop: 6 }}
+                  onClick={onClose}
+                  style={{ marginTop: 6, textDecoration: 'none', display: 'inline-block' }}
                 >
                   Visit the Submission Hub &rarr;
-                </button>
+                </Link>
               </div>
             </div>
           ) : results.length > 0 ? (
@@ -112,16 +116,20 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
                 Found {results.length} article{results.length > 1 ? 's' : ''} matching your search
               </div>
               {results.map((article) => {
+                const articleId = article.slug || article._id || article.id;
+                const articleUrl = `/article/${encodeURIComponent(articleId)}`;
                 const author = typeof article.author === 'object' ? article.author : { name: article.author || 'Anviksha Singh' };
                 const pubDate = article.publishedAt
                   ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                   : article.date || 'Feb 2025';
 
                 return (
-                  <div 
+                  <Link 
                     key={article._id || article.id} 
+                    to={articleUrl}
                     className="search-result-card"
-                    onClick={() => handleResultClick(article)}
+                    onClick={onClose}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <div className="search-result-image-wrapper">
                       <img src={article.coverImage} alt={article.title} loading="lazy" />
@@ -139,7 +147,7 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
                         <span className="arrow-indicator">Read Story <ArrowRight size={14} /></span>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
@@ -154,4 +162,3 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
     </div>
   );
 }
-

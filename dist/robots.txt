@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://childrenofcapital.com/sitemap.xml
+Sitemap: https://childrenofcapital.vercel.app/sitemap.xml

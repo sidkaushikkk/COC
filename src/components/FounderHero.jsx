@@ -1,19 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
 import co_authorPhoto from '../assets/co-founder.png';
 import heroBackground from '../assets/hero-background.avif';
 
 export default function FounderHero({ onNavigate }) {
-  const scrollTo = (id, fallback = '') => {
+  const scrollTo = (id) => {
     const element = document.getElementById(id);
-
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
     }
-
-    onNavigate('articles', fallback);
   };
 
   return (
@@ -40,12 +37,20 @@ export default function FounderHero({ onNavigate }) {
             <button className="publication-btn-primary" onClick={() => scrollTo('newsletter')}>
               Subscribe to the newsletter <ArrowRight size={16} />
             </button>
-            <button className="publication-btn-secondary" onClick={() => onNavigate('articles', '')}>
+            <Link 
+              to="/articles" 
+              className="publication-btn-secondary"
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               Read the latest articles
-            </button>
-            <button className="publication-btn-secondary" onClick={() => onNavigate('submission-hub', '')}>
+            </Link>
+            <Link 
+              to="/submission-hub" 
+              className="publication-btn-secondary"
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            >
               Submit an Article
-            </button>
+            </Link>
           </div>
 
           <div className="publication-hero-notes">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchArticles } from '../services/api';
 import { Clock, Calendar } from 'lucide-react';
 
@@ -24,6 +25,7 @@ export default function LatestGrid({ onNavigate }) {
         <div className="articles-grid-layout">
           {gridArticles.map((article) => {
             const articleId = article.slug || article._id || article.id;
+            const articleUrl = `/article/${encodeURIComponent(articleId)}`;
             const author = typeof article.author === 'object' ? article.author : { name: article.author || 'Anviksha Singh' };
             const pubDate = article.publishedAt
               ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -32,13 +34,14 @@ export default function LatestGrid({ onNavigate }) {
             return (
               <article key={article._id || article.id} className="article-card">
                 {/* Image Cover */}
-                <div 
+                <Link 
+                  to={articleUrl}
                   className="card-image-wrapper"
-                  onClick={() => onNavigate('article', articleId)}
+                  style={{ textDecoration: 'none', display: 'block' }}
                 >
                   <img src={article.coverImage} alt={article.title} loading="lazy" />
                   <div className="card-category-badge font-sans">{article.category}</div>
-                </div>
+                </Link>
 
                 {/* Card Content */}
                 <div className="card-content-body">
@@ -48,11 +51,14 @@ export default function LatestGrid({ onNavigate }) {
                     <span><Calendar size={12} className="meta-inline-icon" /> {pubDate}</span>
                   </div>
 
-                  <h3 
-                    className="card-title-heading"
-                    onClick={() => onNavigate('article', articleId)}
-                  >
-                    {article.title}
+                  <h3>
+                    <Link 
+                      to={articleUrl}
+                      className="card-title-heading"
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      {article.title}
+                    </Link>
                   </h3>
 
                   <p className="card-excerpt-text">
@@ -79,4 +85,3 @@ export default function LatestGrid({ onNavigate }) {
     </section>
   );
 }
-

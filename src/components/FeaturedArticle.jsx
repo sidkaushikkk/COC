@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchArticles } from '../services/api';
 import { Sparkles, BookOpen } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
@@ -18,6 +19,7 @@ export default function FeaturedArticle({ onNavigate }) {
   if (!featuredArticle) return null;
 
   const articleId = featuredArticle.slug || featuredArticle._id || featuredArticle.id;
+  const articleUrl = `/article/${encodeURIComponent(articleId)}`;
   const author = typeof featuredArticle.author === 'object' ? featuredArticle.author : {
     name: featuredArticle.author || 'Anviksha Singh',
     role: 'Founder & Editor, Children of Capital',
@@ -40,9 +42,10 @@ export default function FeaturedArticle({ onNavigate }) {
 
         <div className="featured-article-grid">
           {/* Cover Image Block */}
-          <div 
+          <Link 
+            to={articleUrl}
             className="featured-cover-wrapper"
-            onClick={() => onNavigate('article', articleId)}
+            style={{ textDecoration: 'none', display: 'block' }}
           >
             <img 
               src={featuredArticle.coverImage} 
@@ -52,7 +55,7 @@ export default function FeaturedArticle({ onNavigate }) {
             />
             <div className="featured-cover-overlay"></div>
             <div className="featured-badge font-sans">{featuredArticle.readingTime || 'Advanced'} Analysis</div>
-          </div>
+          </Link>
 
           {/* Details Content Block */}
           <div className="featured-content-wrapper">
@@ -62,11 +65,14 @@ export default function FeaturedArticle({ onNavigate }) {
               <span><BookOpen size={12} className="meta-inline-icon" /> {pubDate}</span>
             </div>
 
-            <h3 
-              className="featured-story-title"
-              onClick={() => onNavigate('article', articleId)}
-            >
-              {featuredArticle.title}
+            <h3>
+              <Link 
+                to={articleUrl}
+                className="featured-story-title"
+                style={{ textDecoration: 'none', color: 'inherit' }}
+              >
+                {featuredArticle.title}
+              </Link>
             </h3>
 
             <p className="featured-excerpt">
@@ -82,16 +88,16 @@ export default function FeaturedArticle({ onNavigate }) {
               </div>
             </div>
 
-            <button 
+            <Link 
+              to={articleUrl}
               className="btn-primary"
-              onClick={() => onNavigate('article', articleId)}
+              style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
               Read Essay
-            </button>
+            </Link>
           </div>
         </div>
       </div>
     </section>
   );
 }
-

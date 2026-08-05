@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   PenTool, 
   CheckCircle, 
@@ -42,14 +43,14 @@ const submissionJsonLd = [
     '@type': 'WebPage',
     name: 'Submission Hub | Children of Capital',
     description: 'Submit your analytical article or essay manuscript to the Children of Capital Editorial Board.',
-    url: 'https://childrenofcapital.vercel.app/#/submission-hub'
+    url: 'https://childrenofcapital.vercel.app/submission-hub'
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.vercel.app/' },
-      { '@type': 'ListItem', position: 2, name: 'Submission Hub', item: 'https://childrenofcapital.vercel.app/#/submission-hub' }
+      { '@type': 'ListItem', position: 2, name: 'Submission Hub', item: 'https://childrenofcapital.vercel.app/submission-hub' }
     ]
   }
 ];
@@ -157,7 +158,7 @@ export default function SubmissionHubPage({ onNavigate }) {
       <SEO
         title="Submission Hub | Children of Capital"
         description="Submit your analytical article or essay manuscript to the Children of Capital Editorial Board."
-        canonical="https://childrenofcapital.vercel.app/#/submission-hub"
+        canonical="https://childrenofcapital.vercel.app/submission-hub"
         jsonLd={submissionJsonLd}
       />
       {/* ─── Hero Section ────────────────────────────────────────── */}
@@ -498,9 +499,9 @@ export default function SubmissionHubPage({ onNavigate }) {
                   <button className="btn-primary" onClick={() => setSubmitted(false)}>
                     Submit Another Manuscript
                   </button>
-                  <button className="btn-secondary" onClick={() => onNavigate('articles')}>
+                  <Link className="btn-secondary" to="/articles" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                     Browse Published Articles
-                  </button>
+                  </Link>
                 </div>
               </div>
             )}

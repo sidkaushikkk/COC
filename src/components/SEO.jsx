@@ -54,8 +54,8 @@ export default function SEO({
     const finalDescription = description || DEFAULT_DESCRIPTION;
     const finalImage = image ? (image.startsWith('http') ? image : `${DEFAULT_BASE_URL}/${image.replace(/^\//, '')}`) : DEFAULT_IMAGE;
     
-    let currentPath = window.location.hash || '#/';
-    const finalCanonical = canonical || `${DEFAULT_BASE_URL}/${currentPath}`;
+    const currentPath = window.location.pathname + window.location.search;
+    const finalCanonical = canonical || `${DEFAULT_BASE_URL}${currentPath === '/' ? '/' : currentPath}`;
 
     // Title
     document.title = finalTitle;

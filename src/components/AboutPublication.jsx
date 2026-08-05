@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, BookOpen, Compass, Lightbulb } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
 
@@ -34,12 +35,12 @@ export default function AboutPublication({ onNavigate }) {
             Every word and every story is driven by the belief that knowledge can change the terms of public conversation. We explore politics, economics, capitalism, global affairs, society, justice, climate, and history—not as isolated subjects, but as connected systems.
           </p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <button className="about-publication-link" onClick={() => onNavigate('articles', '')}>
+            <Link to="/articles" className="about-publication-link" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
               Explore our Articles <ArrowUpRight size={15} />
-            </button>
-            <button className="about-publication-link" onClick={() => onNavigate('submission-hub', '')} style={{ color: 'var(--navy)' }}>
+            </Link>
+            <Link to="/submission-hub" className="about-publication-link" style={{ color: 'var(--navy)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
               Submit a Manuscript <ArrowUpRight size={15} />
-            </button>
+            </Link>
           </div>
         </div>
 

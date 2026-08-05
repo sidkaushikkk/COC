@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen } from 'lucide-react';
 
 export default function Footer({ onNavigate }) {
@@ -14,8 +15,10 @@ export default function Footer({ onNavigate }) {
   };
 
   const handleLinkClick = (pageId, hash) => {
-    onNavigate(pageId, hash);
-    window.scrollTo(0, 0);
+    if (onNavigate) onNavigate(pageId, hash);
+    if (!hash) {
+      window.scrollTo(0, 0);
+    }
   };
 
   return (
@@ -23,10 +26,10 @@ export default function Footer({ onNavigate }) {
       <div className="footer-container">
         {/* Editorial Summary & Newsletter */}
         <div className="footer-main-section">
-          <div className="footer-brand" onClick={() => handleLinkClick('home', '')}>
+          <Link to="/" className="footer-brand" onClick={() => handleLinkClick('home', '')}>
             <span className="footer-logo-icon"><BookOpen size={24} strokeWidth={1.5} /></span>
             <span className="footer-logo-text">Children of Capital</span>
-          </div>
+          </Link>
           <p className="footer-tagline">
             We don't report headlines. We explain the systems behind them. A premium digital magazine dissecting politics, economics, and power.
           </p>
@@ -56,14 +59,13 @@ export default function Footer({ onNavigate }) {
           <div className="footer-column">
             <h4>Publication</h4>
             <ul>
-              <li><a href="#/" onClick={(e) => { e.preventDefault(); handleLinkClick('home', ''); }}>Home</a></li>
-              <li><a href="#/articles" onClick={(e) => { e.preventDefault(); handleLinkClick('articles', ''); }}>All Articles</a></li>
-              <li><a href="#/submission-hub" onClick={(e) => { e.preventDefault(); handleLinkClick('submission-hub', ''); }}>Submission Hub</a></li>
-              <li><a href="#/about" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#about'); }}>Our Philosophy</a></li>
-              <li><a href="#/newsletter" onClick={(e) => { e.preventDefault(); handleLinkClick('home', '#newsletter'); }}>Subscribe</a></li>
+              <li><Link to="/" onClick={() => handleLinkClick('home', '')}>Home</Link></li>
+              <li><Link to="/articles" onClick={() => handleLinkClick('articles', '')}>All Articles</Link></li>
+              <li><Link to="/submission-hub" onClick={() => handleLinkClick('submission-hub', '')}>Submission Hub</Link></li>
+              <li><Link to="/#about" onClick={() => handleLinkClick('home', '#about')}>Our Philosophy</Link></li>
+              <li><Link to="/#newsletter" onClick={() => handleLinkClick('home', '#newsletter')}>Subscribe</Link></li>
             </ul>
           </div>
-
 
           <div className="footer-column font-sans">
             <h4>Editorial Office</h4>

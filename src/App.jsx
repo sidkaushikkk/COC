@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import FounderHero from './components/FounderHero';
 import PublicationHighlights from './components/PublicationHighlights';
@@ -11,53 +12,8 @@ import ArticlePage from './pages/ArticlePage';
 import ArticlesPage from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
 import SubmissionHubPage from './pages/SubmissionHubPage';
+import NotFoundPage from './pages/NotFoundPage';
 import SEO from './components/SEO';
-
-function getRouteFromHash() {
-  const hash = window.location.hash.replace(/^#/, '');
-  const [path, query = ''] = hash.split('?');
-  const segments = path.replace(/^\//, '').split('/').filter(Boolean);
-  const page = segments[0] || 'home';
-  const params = new URLSearchParams(query);
-
-  if (page === 'article' && segments[1]) {
-    return { page: 'article', param: decodeURIComponent(segments[1]), section: '' };
-  }
-
-  if (page === 'articles') {
-    return { page: 'articles', param: query ? `?${query}` : '', section: '' };
-  }
-
-  if (page === 'contact') {
-    return { page: 'contact', param: '', section: '' };
-  }
-
-  if (page === 'submission-hub' || page === 'submit') {
-    return { page: 'submission-hub', param: '', section: '' };
-  }
-
-  return { page: 'home', param: '', section: params.get('section') || '' };
-}
-
-function getHashForRoute(page, param = '') {
-  if (param.startsWith('#')) {
-    return `#/?section=${encodeURIComponent(param.slice(1))}`;
-  }
-
-  if (page === 'article' && param) {
-    return `#/${page}/${encodeURIComponent(param)}`;
-  }
-
-  if (page === 'articles') {
-    return `#/articles${param.startsWith('?') ? param : ''}`;
-  }
-
-  if (page === 'submission-hub' || page === 'submit') {
-    return '#/submission-hub';
-  }
-
-  return page === 'contact' ? '#/contact' : '#/';
-}
 
 const homeJsonLd = [
   {
@@ -90,6 +46,17 @@ const homeJsonLd = [
 ];
 
 function HomePage({ onNavigate }) {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const targetId = location.hash.replace('#', '');
+      window.setTimeout(() => {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [location.hash]);
+
   return (
     <div className="page-enter">
       <SEO
@@ -108,32 +75,90 @@ function HomePage({ onNavigate }) {
   );
 }
 
-export default function App() {
-  const initialRoute = getRouteFromHash();
-  const [currentPage, setCurrentPage] = useState(initialRoute.page);
-  const [currentParam, setCurrentParam] = useState(initialRoute.param);
+// Redirects legacy hash URLs e.g. /#/articles -> /articles
+function HashRedirectHandler() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash && location.hash.startsWith('#/')) {
+      const cleanPath = location.hash.replace(/^#\//, '/');
+      navigate(cleanPath, { replace: true });
+    }
+  }, [location.hash, navigate]);
+
+  return null;
+}
+
+// Scroll restoration on route change
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    } else {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
+
+function MainContent() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const syncRoute = useCallback(() => {
-    const { page, param, section } = getRouteFromHash();
-    setCurrentPage(page);
-    setCurrentParam(param);
+  // Compute current page name for active navbar highlights
+  let currentPage = 'home';
+  if (location.pathname.startsWith('/articles')) {
+    currentPage = 'articles';
+  } else if (location.pathname.startsWith('/article/')) {
+    currentPage = 'article';
+  } else if (location.pathname === '/contact') {
+    currentPage = 'contact';
+  } else if (location.pathname === '/submission-hub' || location.pathname === '/submit' || location.pathname === '/submission') {
+    currentPage = 'submission-hub';
+  }
 
-    if (section) {
-      window.setTimeout(() => {
-        document.getElementById(section)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 80);
+  const onNavigate = useCallback((page, param = '') => {
+    if (param.startsWith('#')) {
+      if (location.pathname !== '/') {
+        navigate(`/${param}`);
+      } else {
+        const id = param.replace('#', '');
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       return;
     }
 
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }, []);
+    if (page === 'article' && param) {
+      navigate(`/article/${encodeURIComponent(param)}`);
+      return;
+    }
 
-  useEffect(() => {
-    window.addEventListener('hashchange', syncRoute);
-    syncRoute();
-    return () => window.removeEventListener('hashchange', syncRoute);
-  }, [syncRoute]);
+    if (page === 'articles') {
+      navigate(`/articles${param.startsWith('?') ? param : ''}`);
+      return;
+    }
+
+    if (page === 'submission-hub' || page === 'submit' || page === 'submission') {
+      navigate('/submission-hub');
+      return;
+    }
+
+    if (page === 'contact') {
+      navigate('/contact');
+      return;
+    }
+
+    navigate('/');
+  }, [navigate, location.pathname]);
 
   // Handle keyboard shortcut for search
   useEffect(() => {
@@ -147,36 +172,10 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const onNavigate = useCallback((page, param = '') => {
-    const nextHash = getHashForRoute(page, param);
-
-    if (window.location.hash === nextHash) {
-      syncRoute();
-      return;
-    }
-
-    window.location.hash = nextHash;
-  }, [syncRoute]);
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return <HomePage onNavigate={onNavigate} />;
-      case 'article':
-        return <ArticlePage articleId={currentParam} onNavigate={onNavigate} />;
-      case 'articles':
-        return <ArticlesPage categoryFilter={currentParam} onNavigate={onNavigate} />;
-      case 'contact':
-        return <ContactPage onNavigate={onNavigate} />;
-      case 'submission-hub':
-        return <SubmissionHubPage onNavigate={onNavigate} />;
-      default:
-        return <HomePage onNavigate={onNavigate} />;
-    }
-  };
-
   return (
     <>
+      <HashRedirectHandler />
+      <ScrollToTop />
       <Navbar
         currentPage={currentPage}
         onNavigate={onNavigate}
@@ -184,7 +183,16 @@ export default function App() {
       />
 
       <main>
-        {renderPage()}
+        <Routes>
+          <Route path="/" element={<HomePage onNavigate={onNavigate} />} />
+          <Route path="/articles" element={<ArticlesPageWrapper onNavigate={onNavigate} />} />
+          <Route path="/article/:slug" element={<ArticlePageWrapper onNavigate={onNavigate} />} />
+          <Route path="/contact" element={<ContactPage onNavigate={onNavigate} />} />
+          <Route path="/submission-hub" element={<SubmissionHubPage onNavigate={onNavigate} />} />
+          <Route path="/submission" element={<Navigate to="/submission-hub" replace />} />
+          <Route path="/submit" element={<Navigate to="/submission-hub" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </main>
 
       <SearchOverlay
@@ -193,5 +201,25 @@ export default function App() {
         onNavigate={onNavigate}
       />
     </>
+  );
+}
+
+function ArticlesPageWrapper({ onNavigate }) {
+  const [searchParams] = useSearchParams();
+  const cat = searchParams.get('cat');
+  const categoryFilter = cat ? `?cat=${encodeURIComponent(cat)}` : '';
+  return <ArticlesPage categoryFilter={categoryFilter} onNavigate={onNavigate} />;
+}
+
+function ArticlePageWrapper({ onNavigate }) {
+  const { slug } = useParams();
+  return <ArticlePage articleId={slug} onNavigate={onNavigate} />;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <MainContent />
+    </BrowserRouter>
   );
 }

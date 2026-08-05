@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Mail, Send, CheckCircle, Users } from 'lucide-react';
 import { submitContactForm } from '../services/api';
 import Footer from '../components/Footer';
@@ -10,7 +11,7 @@ const contactJsonLd = [
     '@type': 'ContactPage',
     name: 'Contact Editorial Desk | Children of Capital',
     description: 'Get in touch with the Children of Capital editorial office for inquiries, feedback, or submissions.',
-    url: 'https://childrenofcapital.vercel.app/#/contact',
+    url: 'https://childrenofcapital.vercel.app/contact',
     mainEntity: {
       '@type': 'Organization',
       name: 'Children of Capital',
@@ -50,7 +51,7 @@ export default function ContactPage({ onNavigate }) {
       <SEO
         title="Contact Editorial Desk | Children of Capital"
         description="Get in touch with the Children of Capital editorial office for reader inquiries, feedback, or submissions."
-        canonical="https://childrenofcapital.vercel.app/#/contact"
+        canonical="https://childrenofcapital.vercel.app/contact"
         jsonLd={contactJsonLd}
       />
       {/* Dark Header */}
@@ -85,13 +86,12 @@ export default function ContactPage({ onNavigate }) {
             <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'var(--ink-muted)', lineHeight: 1.7, marginBottom: 10 }}>
               Have a story, analytical article, or manuscript? Submit directly through our Submission Hub.
             </p>
-            <a 
-              href="#/submission-hub" 
-              onClick={(e) => { e.preventDefault(); onNavigate('submission-hub'); }}
+            <Link 
+              to="/submission-hub" 
               className="btn-text-arrow"
             >
               Go to Submission Hub <span className="arrow-char">&rarr;</span>
-            </a>
+            </Link>
           </div>
 
           <div className="contact-info-block">

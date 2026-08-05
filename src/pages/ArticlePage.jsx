@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchArticles, fetchArticleBySlug } from '../services/api';
 import { ChevronLeft } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
 import SEO from '../components/SEO';
+import NotFoundPage from './NotFoundPage';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
 function parseBold(text) {
@@ -67,31 +69,71 @@ function renderContent(content) {
 
   return null;
 }
+
 /* ── Component ────────────────────────────────────────────────── */
 export default function ArticlePage({ articleId, onNavigate }) {
   const [article, setArticle] = useState(null);
   const [allArticles, setAllArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    fetchArticles().then(data => {
-      setAllArticles(data);
-      if (articleId) {
-        const found = data.find(a => a.slug === articleId || a._id === articleId || a.id === articleId);
-        if (found) {
-          setArticle(found);
-          return;
-        }
-      }
-      if (data.length > 0) {
-        setArticle(data[0]);
-      }
-    });
+    let isMounted = true;
+    setLoading(true);
+    setNotFound(false);
 
-    if (articleId) {
-      fetchArticleBySlug(articleId).then(data => {
-        if (data) setArticle(data);
-      });
+    async function loadArticleData() {
+      try {
+        const data = await fetchArticles();
+        if (!isMounted) return;
+        setAllArticles(data || []);
+
+        if (articleId) {
+          const decodedSlug = decodeURIComponent(articleId);
+          const found = (data || []).find(
+            a => a.slug === articleId || a.slug === decodedSlug || a._id === articleId || a.id === articleId || a.id === decodedSlug
+          );
+
+          if (found) {
+            setArticle(found);
+            setLoading(false);
+            return;
+          }
+
+          // Try fetching from backend endpoint by slug if not matched in initial fetch
+          const apiArticle = await fetchArticleBySlug(articleId);
+          if (!isMounted) return;
+
+          if (apiArticle) {
+            setArticle(apiArticle);
+            setLoading(false);
+            return;
+          }
+
+          // Unknown article slug -> return 404 page
+          setArticle(null);
+          setNotFound(true);
+          setLoading(false);
+        } else if (data && data.length > 0) {
+          setArticle(data[0]);
+          setLoading(false);
+        } else {
+          setNotFound(true);
+          setLoading(false);
+        }
+      } catch (err) {
+        if (!isMounted) return;
+        console.error('Error loading article:', err);
+        setNotFound(true);
+        setLoading(false);
+      }
     }
+
+    loadArticleData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [articleId]);
 
   const author = useMemo(() => {
@@ -108,20 +150,24 @@ export default function ArticlePage({ articleId, onNavigate }) {
 
   const related = useMemo(() => {
     if (!article || !allArticles.length) return [];
-    const currentKey = article.slug || article._id;
+    const currentKey = article.slug || article._id || article.id;
     return allArticles
-      .filter(a => (a.slug || a._id) !== currentKey && a.category === article.category)
+      .filter(a => (a.slug || a._id || a.id) !== currentKey && a.category === article.category)
       .slice(0, 2)
-      .concat(allArticles.filter(a => (a.slug || a._id) !== currentKey && a.category !== article.category).slice(0, 2))
+      .concat(allArticles.filter(a => (a.slug || a._id || a.id) !== currentKey && a.category !== article.category).slice(0, 2))
       .slice(0, 2);
   }, [article, allArticles]);
 
-  if (!article) {
+  if (loading) {
     return (
       <div className="article-page page-enter" style={{ padding: '120px 20px', textAlign: 'center' }}>
-        <p>Loading article...</p>
+        <p style={{ fontFamily: 'Inter, sans-serif', color: 'var(--ink-muted)' }}>Loading article...</p>
       </div>
     );
+  }
+
+  if (notFound || !article) {
+    return <NotFoundPage />;
   }
 
   const pubDate = article.publishedAt
@@ -129,7 +175,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
     : article.date || 'Feb 2025';
 
   const articleSlug = article.slug || article._id || article.id;
-  const canonicalUrl = `https://childrenofcapital.vercel.app/#/article/${encodeURIComponent(articleSlug)}`;
+  const canonicalUrl = `https://childrenofcapital.vercel.app/article/${encodeURIComponent(articleSlug)}`;
   const coverImg = article.coverImage ? (article.coverImage.startsWith('http') ? article.coverImage : `https://childrenofcapital.vercel.app/${article.coverImage.replace(/^\//, '')}`) : 'https://childrenofcapital.vercel.app/TheMenu.jpg';
   const authorName = author?.name || 'Anviksha Singh';
   const articleExcerpt = article.excerpt || (typeof article.content === 'string' ? article.content.substring(0, 160) : article.title);
@@ -166,7 +212,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.vercel.app/' },
-        { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.vercel.app/#/articles' },
+        { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.vercel.app/articles' },
         { '@type': 'ListItem', position: 3, name: article.title, item: canonicalUrl }
       ]
     }
@@ -205,12 +251,13 @@ export default function ArticlePage({ articleId, onNavigate }) {
 
       {/* Body */}
       <div className="article-body-container">
-        <button
+        <Link
+          to="/articles"
           className="article-back-btn font-sans"
-          onClick={() => onNavigate('articles', '')}
+          style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4 }}
         >
           <ChevronLeft size={16} /> All Articles
-        </button>
+        </Link>
 
         <div className="article-body-content">
           {renderContent(article.content)}
@@ -249,11 +296,13 @@ export default function ArticlePage({ articleId, onNavigate }) {
             <div className="article-related-grid">
               {related.map(rel => {
                 const relId = rel.slug || rel._id || rel.id;
+                const relUrl = `/article/${encodeURIComponent(relId)}`;
                 return (
-                  <div
+                  <Link
                     key={rel._id || rel.id}
+                    to={relUrl}
                     className="related-article-card"
-                    onClick={() => onNavigate('article', relId)}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <img
                       src={rel.coverImage}
@@ -265,7 +314,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
                       <div className="related-article-cat font-sans">{rel.category}</div>
                       <div className="related-article-title">{rel.title}</div>
                     </div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
@@ -275,4 +324,3 @@ export default function ArticlePage({ articleId, onNavigate }) {
     </div>
   );
 }
-

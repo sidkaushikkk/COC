@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Menu, X, BookOpen } from 'lucide-react';
 
 export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
@@ -24,36 +25,33 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
   };
 
   const navItems = [
-    { label: 'Home', page: 'home', hash: '' },
-    { label: 'Articles', page: 'articles', hash: '' },
-    { label: 'Submission Hub', page: 'submission-hub', hash: '' },
-    { label: 'About', page: 'home', hash: '#about' },
-    { label: 'Contact', page: 'contact', hash: '' }
+    { label: 'Home', page: 'home', hash: '', to: '/' },
+    { label: 'Articles', page: 'articles', hash: '', to: '/articles' },
+    { label: 'Submission Hub', page: 'submission-hub', hash: '', to: '/submission-hub' },
+    { label: 'About', page: 'home', hash: '#about', to: '/#about' },
+    { label: 'Contact', page: 'contact', hash: '', to: '/contact' }
   ];
 
   return (
     <nav className={`navbar ${isScrolled || currentPage !== 'home' ? 'navbar-solid' : 'navbar-transparent'}`}>
       <div className="navbar-container">
         {/* Brand Logo */}
-        <div className="navbar-logo" onClick={() => handleLinkClick('home', '')}>
+        <Link to="/" className="navbar-logo" onClick={() => setIsMobileMenuOpen(false)}>
           <span className="logo-icon"><BookOpen size={20} strokeWidth={1.5} /></span>
           <span className="logo-text">Children of Capital</span>
-        </div>
+        </Link>
 
         {/* Desktop Links */}
         <ul className="navbar-links">
           {navItems.map((item, idx) => (
             <li key={idx}>
-              <a
-                href={item.hash ? item.hash : `#/${item.page}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLinkClick(item.page, item.hash);
-                }}
+              <Link
+                to={item.to}
+                onClick={() => handleLinkClick(item.page, item.hash)}
                 className={currentPage === item.page && !item.hash ? 'active-link' : ''}
               >
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -64,19 +62,23 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
             <Search size={18} strokeWidth={2} />
           </button>
 
-          <button 
+          <Link 
+            to="/submission-hub"
             className="navbar-submit-btn"
-            onClick={() => handleLinkClick('submission-hub', '')}
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            onClick={() => setIsMobileMenuOpen(false)}
           >
             Submit Article
-          </button>
+          </Link>
           
-          <button 
+          <Link 
+            to="/#newsletter"
             className="navbar-subscribe-btn"
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={() => handleLinkClick('home', '#newsletter')}
           >
             Subscribe
-          </button>
+          </Link>
 
           <button 
             className="mobile-menu-toggle"
@@ -94,33 +96,33 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
           <ul className="mobile-menu-links">
             {navItems.map((item, idx) => (
               <li key={idx}>
-                <a
-                  href={item.hash ? item.hash : `#/${item.page}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleLinkClick(item.page, item.hash);
-                  }}
+                <Link
+                  to={item.to}
+                  onClick={() => handleLinkClick(item.page, item.hash)}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li>
-              <button 
+              <Link 
+                to="/submission-hub"
                 className="mobile-subscribe-btn"
-                style={{ marginBottom: 10, background: 'var(--navy)', color: 'var(--cream)' }}
-                onClick={() => handleLinkClick('submission-hub', '')}
+                style={{ marginBottom: 10, background: 'var(--navy)', color: 'var(--cream)', textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 Submit Article
-              </button>
+              </Link>
             </li>
             <li>
-              <button 
+              <Link 
+                to="/#newsletter"
                 className="mobile-subscribe-btn"
+                style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
                 onClick={() => handleLinkClick('home', '#newsletter')}
               >
                 Subscribe
-              </button>
+              </Link>
             </li>
           </ul>
         </div>
