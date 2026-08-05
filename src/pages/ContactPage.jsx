@@ -10,7 +10,7 @@ const contactJsonLd = [
     '@type': 'ContactPage',
     name: 'Contact Editorial Desk | Children of Capital',
     description: 'Get in touch with the Children of Capital editorial office for inquiries, feedback, or submissions.',
-    url: 'https://childrenofcapital.com/#/contact',
+    url: 'https://childrenofcapital.vercel.app/#/contact',
     mainEntity: {
       '@type': 'Organization',
       name: 'Children of Capital',
@@ -50,7 +50,7 @@ export default function ContactPage({ onNavigate }) {
       <SEO
         title="Contact Editorial Desk | Children of Capital"
         description="Get in touch with the Children of Capital editorial office for reader inquiries, feedback, or submissions."
-        canonical="https://childrenofcapital.com/#/contact"
+        canonical="https://childrenofcapital.vercel.app/#/contact"
         jsonLd={contactJsonLd}
       />
       {/* Dark Header */}

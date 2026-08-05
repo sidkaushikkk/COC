@@ -64,8 +64,8 @@ const homeJsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Children of Capital',
-    url: 'https://childrenofcapital.com',
-    logo: 'https://childrenofcapital.com/favicon.svg',
+    url: 'https://childrenofcapital.vercel.app',
+    logo: 'https://childrenofcapital.vercel.app/favicon.svg',
     founder: {
       '@type': 'Person',
       name: 'Anviksha Singh',
@@ -81,7 +81,7 @@ const homeJsonLd = [
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Children of Capital',
-    url: 'https://childrenofcapital.com',
+    url: 'https://childrenofcapital.vercel.app',
     publisher: {
       '@type': 'Organization',
       name: 'Children of Capital'
@@ -95,7 +95,7 @@ function HomePage({ onNavigate }) {
       <SEO
         title="Children of Capital | Systems, Wealth, and Power"
         description="A premium digital magazine dissecting politics, economics, capital structures, and power. Clear-eyed essays and analytical dispatches by Anviksha Singh."
-        canonical="https://childrenofcapital.com/"
+        canonical="https://childrenofcapital.vercel.app/"
         jsonLd={homeJsonLd}
       />
       <FounderHero onNavigate={onNavigate} />

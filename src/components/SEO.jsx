@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const DEFAULT_BASE_URL = 'https://childrenofcapital.com';
+const DEFAULT_BASE_URL = 'https://childrenofcapital.vercel.app';
 const DEFAULT_SITE_NAME = 'Children of Capital';
 const DEFAULT_IMAGE = `${DEFAULT_BASE_URL}/TheMenu.jpg`;
 const DEFAULT_DESCRIPTION = 'A premium digital magazine dissecting politics, economics, capital structures, and power. Clear-eyed essays and analytical dispatches by Anviksha Singh.';

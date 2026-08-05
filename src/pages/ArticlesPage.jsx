@@ -10,14 +10,14 @@ const articlesJsonLd = [
     '@type': 'WebPage',
     name: 'All Articles & Dispatches | Children of Capital',
     description: 'Explore long-form analytical essays dissecting politics, economics, capital structures, and power.',
-    url: 'https://childrenofcapital.com/#/articles'
+    url: 'https://childrenofcapital.vercel.app/#/articles'
   },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.com/' },
-      { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.com/#/articles' }
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.vercel.app/' },
+      { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.vercel.app/#/articles' }
     ]
   }
 ];
@@ -56,7 +56,7 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
       <SEO
         title={activeCategory !== 'All' ? `${activeCategory} Articles | Children of Capital` : 'All Articles & Dispatches | Children of Capital'}
         description={`Read analytical essays on ${activeCategory !== 'All' ? activeCategory : 'politics, economics, and power'} published by Children of Capital.`}
-        canonical={activeCategory !== 'All' ? `https://childrenofcapital.com/#/articles?cat=${encodeURIComponent(activeCategory)}` : 'https://childrenofcapital.com/#/articles'}
+        canonical={activeCategory !== 'All' ? `https://childrenofcapital.vercel.app/#/articles?cat=${encodeURIComponent(activeCategory)}` : 'https://childrenofcapital.vercel.app/#/articles'}
         jsonLd={articlesJsonLd}
       />
       {/* Page Header */}

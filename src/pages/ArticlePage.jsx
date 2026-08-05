@@ -129,8 +129,8 @@ export default function ArticlePage({ articleId, onNavigate }) {
     : article.date || 'Feb 2025';
 
   const articleSlug = article.slug || article._id || article.id;
-  const canonicalUrl = `https://childrenofcapital.com/#/article/${encodeURIComponent(articleSlug)}`;
-  const coverImg = article.coverImage ? (article.coverImage.startsWith('http') ? article.coverImage : `https://childrenofcapital.com/${article.coverImage.replace(/^\//, '')}`) : 'https://childrenofcapital.com/TheMenu.jpg';
+  const canonicalUrl = `https://childrenofcapital.vercel.app/#/article/${encodeURIComponent(articleSlug)}`;
+  const coverImg = article.coverImage ? (article.coverImage.startsWith('http') ? article.coverImage : `https://childrenofcapital.vercel.app/${article.coverImage.replace(/^\//, '')}`) : 'https://childrenofcapital.vercel.app/TheMenu.jpg';
   const authorName = author?.name || 'Anviksha Singh';
   const articleExcerpt = article.excerpt || (typeof article.content === 'string' ? article.content.substring(0, 160) : article.title);
 
@@ -153,7 +153,7 @@ export default function ArticlePage({ articleId, onNavigate }) {
         name: 'Children of Capital',
         logo: {
           '@type': 'ImageObject',
-          url: 'https://childrenofcapital.com/favicon.svg'
+          url: 'https://childrenofcapital.vercel.app/favicon.svg'
         }
       },
       mainEntityOfPage: {
@@ -165,8 +165,8 @@ export default function ArticlePage({ articleId, onNavigate }) {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.com/' },
-        { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.com/#/articles' },
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.vercel.app/' },
+        { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.vercel.app/#/articles' },
         { '@type': 'ListItem', position: 3, name: article.title, item: canonicalUrl }
       ]
     }
