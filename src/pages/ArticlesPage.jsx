@@ -2,6 +2,25 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { fetchArticles } from '../services/api';
 import { Calendar } from 'lucide-react';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
+
+const articlesJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'All Articles & Dispatches | Children of Capital',
+    description: 'Explore long-form analytical essays dissecting politics, economics, capital structures, and power.',
+    url: 'https://childrenofcapital.com/#/articles'
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.com/#/articles' }
+    ]
+  }
+];
 
 export default function ArticlesPage({ categoryFilter, onNavigate }) {
   const [articles, setArticles] = useState([]);
@@ -34,6 +53,12 @@ export default function ArticlesPage({ categoryFilter, onNavigate }) {
 
   return (
     <div className="articles-page page-enter">
+      <SEO
+        title={activeCategory !== 'All' ? `${activeCategory} Articles | Children of Capital` : 'All Articles & Dispatches | Children of Capital'}
+        description={`Read analytical essays on ${activeCategory !== 'All' ? activeCategory : 'politics, economics, and power'} published by Children of Capital.`}
+        canonical={activeCategory !== 'All' ? `https://childrenofcapital.com/#/articles?cat=${encodeURIComponent(activeCategory)}` : 'https://childrenofcapital.com/#/articles'}
+        jsonLd={articlesJsonLd}
+      />
       {/* Page Header */}
       <div className="articles-page-header">
         <div className="container">

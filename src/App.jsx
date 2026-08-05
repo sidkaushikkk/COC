@@ -11,6 +11,7 @@ import ArticlePage from './pages/ArticlePage';
 import ArticlesPage from './pages/ArticlesPage';
 import ContactPage from './pages/ContactPage';
 import SubmissionHubPage from './pages/SubmissionHubPage';
+import SEO from './components/SEO';
 
 function getRouteFromHash() {
   const hash = window.location.hash.replace(/^#/, '');
@@ -58,9 +59,45 @@ function getHashForRoute(page, param = '') {
   return page === 'contact' ? '#/contact' : '#/';
 }
 
+const homeJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Children of Capital',
+    url: 'https://childrenofcapital.com',
+    logo: 'https://childrenofcapital.com/favicon.svg',
+    founder: {
+      '@type': 'Person',
+      name: 'Anviksha Singh',
+      jobTitle: 'Founder & Editor'
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: 'anvikshasingh583@gmail.com',
+      contactType: 'editorial office'
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Children of Capital',
+    url: 'https://childrenofcapital.com',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Children of Capital'
+    }
+  }
+];
+
 function HomePage({ onNavigate }) {
   return (
     <div className="page-enter">
+      <SEO
+        title="Children of Capital | Systems, Wealth, and Power"
+        description="A premium digital magazine dissecting politics, economics, capital structures, and power. Clear-eyed essays and analytical dispatches by Anviksha Singh."
+        canonical="https://childrenofcapital.com/"
+        jsonLd={homeJsonLd}
+      />
       <FounderHero onNavigate={onNavigate} />
       <PublicationHighlights />
       <FeaturedArticle onNavigate={onNavigate} />

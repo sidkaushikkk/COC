@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { fetchArticles, fetchArticleBySlug } from '../services/api';
 import { ChevronLeft } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
+import SEO from '../components/SEO';
 
 /* ── Simple inline markdown renderer ─────────────────────────── */
 function parseBold(text) {
@@ -127,8 +128,60 @@ export default function ArticlePage({ articleId, onNavigate }) {
     ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : article.date || 'Feb 2025';
 
+  const articleSlug = article.slug || article._id || article.id;
+  const canonicalUrl = `https://childrenofcapital.com/#/article/${encodeURIComponent(articleSlug)}`;
+  const coverImg = article.coverImage ? (article.coverImage.startsWith('http') ? article.coverImage : `https://childrenofcapital.com/${article.coverImage.replace(/^\//, '')}`) : 'https://childrenofcapital.com/TheMenu.jpg';
+  const authorName = author?.name || 'Anviksha Singh';
+  const articleExcerpt = article.excerpt || (typeof article.content === 'string' ? article.content.substring(0, 160) : article.title);
+
+  const articleJsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      headline: article.title,
+      description: articleExcerpt,
+      image: [coverImg],
+      datePublished: article.publishedAt || article.createdAt || '2025-02-01T00:00:00Z',
+      dateModified: article.updatedAt || article.publishedAt || '2025-02-01T00:00:00Z',
+      author: {
+        '@type': 'Person',
+        name: authorName,
+        url: author?.linkedin || 'https://www.linkedin.com/in/anviksha-singh-children-of-capital/'
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'Children of Capital',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://childrenofcapital.com/favicon.svg'
+        }
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl
+      }
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://childrenofcapital.com/#/articles' },
+        { '@type': 'ListItem', position: 3, name: article.title, item: canonicalUrl }
+      ]
+    }
+  ];
+
   return (
     <div className="article-page page-enter">
+      <SEO
+        title={`${article.title} | Children of Capital`}
+        description={articleExcerpt}
+        canonical={canonicalUrl}
+        image={coverImg}
+        type="article"
+        jsonLd={articleJsonLd}
+      />
       {/* Hero */}
       <div className="article-hero">
         <img

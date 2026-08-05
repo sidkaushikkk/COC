@@ -16,6 +16,7 @@ import {
 import { CATEGORIES } from '../data/mockData';
 import { submitContributorArticle } from '../services/api';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
 
 const GUIDELINES = [
   {
@@ -35,10 +36,26 @@ const GUIDELINES = [
   }
 ];
 
+const submissionJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Submission Hub | Children of Capital',
+    description: 'Submit your analytical article or essay manuscript to the Children of Capital Editorial Board.',
+    url: 'https://childrenofcapital.com/#/submission-hub'
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://childrenofcapital.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Submission Hub', item: 'https://childrenofcapital.com/#/submission-hub' }
+    ]
+  }
+];
+
 export default function SubmissionHubPage({ onNavigate }) {
-  // Update document title for SEO
   useEffect(() => {
-    document.title = 'Submission Hub | Children of Capital';
     window.scrollTo(0, 0);
   }, []);
 
@@ -137,6 +154,12 @@ export default function SubmissionHubPage({ onNavigate }) {
 
   return (
     <div className="submission-hub-page page-enter">
+      <SEO
+        title="Submission Hub | Children of Capital"
+        description="Submit your analytical article or essay manuscript to the Children of Capital Editorial Board."
+        canonical="https://childrenofcapital.com/#/submission-hub"
+        jsonLd={submissionJsonLd}
+      />
       {/* ─── Hero Section ────────────────────────────────────────── */}
       <section className="submission-hero">
         <div className="submission-hero-container">

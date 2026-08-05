@@ -2,6 +2,22 @@ import React, { useState } from 'react';
 import { Mail, Send, CheckCircle, Users } from 'lucide-react';
 import { submitContactForm } from '../services/api';
 import Footer from '../components/Footer';
+import SEO from '../components/SEO';
+
+const contactJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact Editorial Desk | Children of Capital',
+    description: 'Get in touch with the Children of Capital editorial office for inquiries, feedback, or submissions.',
+    url: 'https://childrenofcapital.com/#/contact',
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'Children of Capital',
+      email: 'anvikshasingh583@gmail.com'
+    }
+  }
+];
 
 export default function ContactPage({ onNavigate }) {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -31,6 +47,12 @@ export default function ContactPage({ onNavigate }) {
 
   return (
     <div className="contact-page page-enter">
+      <SEO
+        title="Contact Editorial Desk | Children of Capital"
+        description="Get in touch with the Children of Capital editorial office for reader inquiries, feedback, or submissions."
+        canonical="https://childrenofcapital.com/#/contact"
+        jsonLd={contactJsonLd}
+      />
       {/* Dark Header */}
       <div className="contact-header">
         <div className="contact-header-inner">
