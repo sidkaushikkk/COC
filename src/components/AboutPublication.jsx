@@ -33,9 +33,14 @@ export default function AboutPublication({ onNavigate }) {
           <p className="about-publication-body">
             Every word and every story is driven by the belief that knowledge can change the terms of public conversation. We explore politics, economics, capitalism, global affairs, society, justice, climate, and history—not as isolated subjects, but as connected systems.
           </p>
-          <button className="about-publication-link" onClick={() => onNavigate('articles', '')}>
-            Explore our Articles <ArrowUpRight size={15} />
-          </button>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <button className="about-publication-link" onClick={() => onNavigate('articles', '')}>
+              Explore our Articles <ArrowUpRight size={15} />
+            </button>
+            <button className="about-publication-link" onClick={() => onNavigate('submission-hub', '')} style={{ color: 'var(--navy)' }}>
+              Submit a Manuscript <ArrowUpRight size={15} />
+            </button>
+          </div>
         </div>
 
         <div className="about-publication-details">

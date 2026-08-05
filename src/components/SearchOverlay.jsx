@@ -90,6 +90,21 @@ export default function SearchOverlay({ isOpen, onClose, onNavigate }) {
             <div className="search-status-message">
               <h3>Discover Deep-Dive Journalism</h3>
               <p>Type a keyword, such as "Algorithms", "Carbon", "TSMC", "Nixon", or "Gig economy", to locate essays dissecting capital structures.</p>
+              <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)' }}>
+                <p style={{ fontSize: 14, color: 'var(--navy)', fontWeight: 600 }}>
+                  Interested in contributing an essay?
+                </p>
+                <button
+                  className="btn-text-arrow"
+                  onClick={() => {
+                    onClose();
+                    onNavigate('submission-hub');
+                  }}
+                  style={{ marginTop: 6 }}
+                >
+                  Visit the Submission Hub &rarr;
+                </button>
+              </div>
             </div>
           ) : results.length > 0 ? (
             <div className="search-results-list">

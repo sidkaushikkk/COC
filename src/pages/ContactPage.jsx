@@ -52,6 +52,10 @@ export default function ContactPage({ onNavigate }) {
               <Mail size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
               anvikshasingh583@gmail.com
             </a>
+            <a href="mailto:ksiddhant705@gmail.com">
+              <Mail size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
+              ksiddhant705@gmail.com
+            </a>
           </div>
 
           <div className="contact-info-block">

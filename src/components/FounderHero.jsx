@@ -1,6 +1,7 @@
 import React from 'react';
-import { ArrowDown, ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import authorPhoto from '../assets/author.webp';
+import co_authorPhoto from '../assets/co-founder.png';
 import heroBackground from '../assets/hero-background.avif';
 
 export default function FounderHero({ onNavigate }) {
@@ -42,6 +43,9 @@ export default function FounderHero({ onNavigate }) {
             <button className="publication-btn-secondary" onClick={() => onNavigate('articles', '')}>
               Read the latest articles
             </button>
+            <button className="publication-btn-secondary" onClick={() => onNavigate('submission-hub', '')}>
+              Submit an Article
+            </button>
           </div>
 
           <div className="publication-hero-notes">
@@ -58,6 +62,14 @@ export default function FounderHero({ onNavigate }) {
             <div>
               <strong>Anviksha Singh</strong>
               <p>Founder and editor of Children of Capital.</p>
+            </div>
+          </div>
+          <br/>
+          <div className="hero-author-profile">
+            <img src={co_authorPhoto} alt="Co-founder Children of Capital" />
+            <div>
+              <strong>Sid Kaushik</strong>
+              <p>Co-founder, Children of Capital.</p>
             </div>
           </div>
         </aside>

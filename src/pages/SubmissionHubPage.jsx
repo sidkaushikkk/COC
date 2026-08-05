@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { 
   PenTool, 
   CheckCircle, 
-  Clock, 
   FileText, 
   ShieldCheck, 
   ArrowRight, 

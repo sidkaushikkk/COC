@@ -26,7 +26,7 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
   const navItems = [
     { label: 'Home', page: 'home', hash: '' },
     { label: 'Articles', page: 'articles', hash: '' },
-    { label: 'Newsletter', page: 'home', hash: '#newsletter' },
+    { label: 'Submission Hub', page: 'submission-hub', hash: '' },
     { label: 'About', page: 'home', hash: '#about' },
     { label: 'Contact', page: 'contact', hash: '' }
   ];
@@ -63,6 +63,13 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
           <button className="search-toggle-btn" onClick={onOpenSearch} aria-label="Search articles">
             <Search size={18} strokeWidth={2} />
           </button>
+
+          <button 
+            className="navbar-submit-btn"
+            onClick={() => handleLinkClick('submission-hub', '')}
+          >
+            Submit Article
+          </button>
           
           <button 
             className="navbar-subscribe-btn"
@@ -98,6 +105,15 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
                 </a>
               </li>
             ))}
+            <li>
+              <button 
+                className="mobile-subscribe-btn"
+                style={{ marginBottom: 10, background: 'var(--navy)', color: 'var(--cream)' }}
+                onClick={() => handleLinkClick('submission-hub', '')}
+              >
+                Submit Article
+              </button>
+            </li>
             <li>
               <button 
                 className="mobile-subscribe-btn"
