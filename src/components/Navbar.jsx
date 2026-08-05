@@ -26,7 +26,7 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
   const navItems = [
     { label: 'Home', page: 'home', hash: '' },
     { label: 'Articles', page: 'articles', hash: '' },
-    { label: 'Submission Hub', page: 'submission-hub', hash: '' },
+    { label: 'Newsletter', page: 'home', hash: '#newsletter' },
     { label: 'About', page: 'home', hash: '#about' },
     { label: 'Contact', page: 'contact', hash: '' }
   ];
