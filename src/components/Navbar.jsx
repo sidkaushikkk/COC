@@ -8,20 +8,56 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
+      if (window.scrollY > 30) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when mobile menu drawer is active
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  // Close mobile drawer on Escape key press or window resize to desktop
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth > 1024 && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMobileMenuOpen]);
+
   const handleLinkClick = (pageId, hash) => {
     setIsMobileMenuOpen(false);
-    onNavigate(pageId, hash);
+    if (onNavigate) {
+      onNavigate(pageId, hash);
+    }
   };
 
   const navItems = [
@@ -33,7 +69,7 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
   ];
 
   return (
-    <nav className={`navbar ${isScrolled || currentPage !== 'home' ? 'navbar-solid' : 'navbar-transparent'}`}>
+    <nav className={`navbar ${isScrolled || currentPage !== 'home' ? 'navbar-solid' : 'navbar-transparent'} ${isMobileMenuOpen ? 'mobile-menu-active' : ''}`}>
       <div className="navbar-container">
         {/* Brand Logo */}
         <Link to="/" className="navbar-logo" onClick={() => setIsMobileMenuOpen(false)}>
@@ -62,7 +98,6 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
             <Search size={18} strokeWidth={2} />
           </button>
 
-          
           <Link 
             to="/#newsletter"
             className="navbar-subscribe-btn"
@@ -75,7 +110,9 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
           <button 
             className="mobile-menu-toggle"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-nav-menu"
           >
             {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -84,39 +121,46 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
 
       {/* Mobile Menu Drawer */}
       {isMobileMenuOpen && (
-        <div className="mobile-menu-overlay">
-          <ul className="mobile-menu-links">
-            {navItems.map((item, idx) => (
-              <li key={idx}>
-                <Link
-                  to={item.to}
-                  onClick={() => handleLinkClick(item.page, item.hash)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li>
+        <div 
+          className="mobile-menu-overlay" 
+          id="mobile-nav-menu"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsMobileMenuOpen(false);
+          }}
+        >
+          <div className="mobile-menu-container">
+            <ul className="mobile-menu-links">
+              {navItems.map((item, idx) => (
+                <li key={idx}>
+                  <Link
+                    to={item.to}
+                    onClick={() => handleLinkClick(item.page, item.hash)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mobile-menu-actions">
               <Link 
                 to="/submission-hub"
-                className="mobile-subscribe-btn"
-                style={{ marginBottom: 10, background: 'var(--navy)', color: 'var(--cream)', textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                className="mobile-submit-btn"
+                style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Submit Article
               </Link>
-            </li>
-            <li>
               <Link 
                 to="/#newsletter"
                 className="mobile-subscribe-btn"
-                style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                 onClick={() => handleLinkClick('home', '#newsletter')}
               >
                 Subscribe
               </Link>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       )}
     </nav>

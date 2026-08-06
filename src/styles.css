@@ -179,7 +179,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: clamp(12px, 2.5vw, 32px);
 }
 
 .navbar-logo {
@@ -202,7 +202,7 @@
 .navbar-links {
   display: flex;
   list-style: none;
-  gap: 32px;
+  gap: clamp(14px, 2vw, 32px);
   flex: 1;
   justify-content: center;
 }
@@ -317,57 +317,112 @@
 }
 .navbar-transparent .mobile-menu-toggle { color: white; }
 
+.mobile-menu-active {
+  background: rgba(248, 246, 242, 0.98) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-menu-active .navbar-logo,
+.mobile-menu-active .search-toggle-btn,
+.mobile-menu-active .mobile-menu-toggle {
+  color: var(--ink) !important;
+}
+
 .mobile-menu-overlay {
   position: fixed;
   top: var(--navbar-h);
   left: 0;
   right: 0;
   bottom: 0;
+  height: calc(100vh - var(--navbar-h));
   background: rgba(248, 246, 242, 0.98);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   z-index: 999;
   display: flex;
-  align-items: flex-start;
-  padding-top: 24px;
-  animation: slideDown 0.25s ease;
+  flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mobile-menu-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .mobile-menu-links {
   list-style: none;
   width: 100%;
-  padding: 0 24px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
 }
 .mobile-menu-links li a {
-  display: block;
+  display: flex;
+  align-items: center;
   font-family: 'Lora', serif;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 500;
   color: var(--ink);
-  padding: 14px 0;
+  padding: 16px 0;
+  min-height: 52px;
   border-bottom: 1px solid var(--border);
   transition: color var(--transition), padding-left var(--transition);
 }
-.mobile-menu-links li a:hover {
+.mobile-menu-links li a:hover,
+.mobile-menu-links li a:active {
   color: var(--gold-dark);
   padding-left: 8px;
 }
-.mobile-subscribe-btn {
-  margin-top: 16px;
+
+.mobile-menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.mobile-submit-btn {
   width: 100%;
-  padding: 14px;
-  background: var(--navy);
-  color: var(--cream);
-  border: none;
-  cursor: pointer;
+  padding: 13px 20px;
+  background: transparent;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+.mobile-submit-btn:hover {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.mobile-subscribe-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition);
+}
+.mobile-subscribe-btn:hover {
+  background: var(--gold-dark);
 }
 
 /* ─── Founder Hero ───────────────────────────────────────────── */
