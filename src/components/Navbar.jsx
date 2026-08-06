@@ -62,14 +62,6 @@ export default function Navbar({ currentPage, onNavigate, onOpenSearch }) {
             <Search size={18} strokeWidth={2} />
           </button>
 
-          <Link 
-            to="/submission-hub"
-            className="navbar-submit-btn"
-            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Submit Article
-          </Link>
           
           <Link 
             to="/#newsletter"

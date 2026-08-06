@@ -69,7 +69,6 @@ export default function FounderHero({ onNavigate }) {
               <p>Founder and editor of Children of Capital.</p>
             </div>
           </div>
-          <br/>
           <div className="hero-author-profile">
             <img src={co_authorPhoto} alt="Co-founder Children of Capital" />
             <div>
