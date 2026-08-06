@@ -22,18 +22,34 @@ app.use(helmet());
 connectDB();
 
 // Middlewares
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:5173",
+];
+
+if (process.env.FRONTEND_URL) {
+  process.env.FRONTEND_URL.split(',').forEach((url) => {
+    const trimmed = url.trim().replace(/\/+$/, '');
+    if (trimmed && !allowedOrigins.includes(trimmed)) {
+      allowedOrigins.push(trimmed);
+    }
+  });
+}
+
 app.use(
   cors({
     origin: function (origin, callback) {
-      const allowedOrigins = [
-        process.env.FRONTEND_URL,
-        "http://localhost:5173",
-      ];
-
       // Allow requests with no origin (Postman, curl, server-to-server)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+      const cleanOrigin = origin.replace(/\/+$/, '');
+
+      if (
+        allowedOrigins.includes(cleanOrigin) ||
+        /\.vercel\.app$/.test(cleanOrigin) ||
+        /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(cleanOrigin)
+      ) {
         return callback(null, true);
       }
 
